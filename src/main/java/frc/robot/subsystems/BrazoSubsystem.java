@@ -32,8 +32,10 @@ public class BrazoSubsystem extends SubsystemBase {
   }
 
   public void ejesuperior(double velsup) {
+
     motejearriba.set(velsup);
     // motejearriba.set(TalonFXControlMode.Velocity, (velocidadpadarle) )
+    
   }
 
   public double gradosEjeSuperior() {
