@@ -80,6 +80,8 @@ public class Constants {
     }
 
     
+
+    
     public static final class KPIDejeinferior {
 
         public static final int kSlotIdx = 0;
