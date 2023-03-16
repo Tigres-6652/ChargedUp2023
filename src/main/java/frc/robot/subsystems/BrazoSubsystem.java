@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KPIDejeinferior;
@@ -15,11 +16,24 @@ public class BrazoSubsystem extends SubsystemBase {
   WPI_TalonSRX motejeabajo = new WPI_TalonSRX(PUERTOSCAN.PuertMotEjeinferior);
   WPI_TalonFX motejearriba = new WPI_TalonFX(PUERTOSCAN.PuertMotEjeSuperior);
 
+  DigitalInput limitejeinferior=new DigitalInput(8);
+  DigitalInput limitejesuperior=new DigitalInput(9);
+
+
+  
   public BrazoSubsystem() {
   }
 
   @Override
   public void periodic() {
+
+
+
+
+    SmartDashboard.putBoolean("limitarriba", !limitejesuperior.get());
+
+    SmartDashboard.putBoolean("limitinferior", !limitejeinferior.get());
+
 
     SmartDashboard.putNumber("grados eje inferior", gradosEjeInferior());
     SmartDashboard.putNumber("grados eje superior", gradosEjeSuperior());
@@ -27,13 +41,49 @@ public class BrazoSubsystem extends SubsystemBase {
   }
 
   public void ejeinferior(double velocidadmotorinferior) {
-    motejeabajo.set(velocidadmotorinferior);
     // motejeabajo.set(TalonFXControlMode.Velocity, (velocidadpadarle) )
+
+    
+
+    if(limitejeinferior.get()){
+
+      motejeabajo.set(velocidadmotorinferior);
+
+    }else if(!limitejeinferior.get()&&velocidadmotorinferior<0.001){
+
+      motejeabajo.set(velocidadmotorinferior);
+
+    }else if(!limitejeinferior.get()&&velocidadmotorinferior>0.001){
+
+      motejeabajo.set(0);
+
+
+    }
+
   }
 
   public void ejesuperior(double velsup) {
 
-    motejearriba.set(velsup);
+    
+    
+
+    if(limitejesuperior.get()){
+
+      motejearriba.set(velsup);
+
+    }else if(!limitejesuperior.get()&&velsup<0.001){
+
+      motejearriba.set(velsup);
+
+    }else if(!limitejesuperior.get()&&velsup>0.001){
+
+      motejearriba.set(0);
+
+
+    }
+
+
+
     // motejearriba.set(TalonFXControlMode.Velocity, (velocidadpadarle) )
     
   }
@@ -44,7 +94,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
     double vuelta_eje_con_reduccion = ((pulsosSensor) / (4096) / (100));
 
-    double gradoseje = (vuelta_eje_con_reduccion / 0.608695) * (360);
+    double gradoseje = (vuelta_eje_con_reduccion / 3.285714) * (360);
 
     return gradoseje;
   }
@@ -53,7 +103,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
     double pulsosSensor = motejeabajo.getSelectedSensorPosition();
 
-    double vuelta_eje_con_reduccion = ((pulsosSensor) / (4096) / (81));
+    double vuelta_eje_con_reduccion = ((pulsosSensor) / (4096));
 
     double gradoseje = (vuelta_eje_con_reduccion / 4.5714) * (360);
 
@@ -105,7 +155,7 @@ public class BrazoSubsystem extends SubsystemBase {
    * 14 dientes en motor
    * 64 dientes
    * 
-   * reduccion de 81
+   * 
    * 
    * 4.5714
    * 
@@ -115,12 +165,12 @@ public class BrazoSubsystem extends SubsystemBase {
    * 
    * Eje superior:
    * 
-   * 46 dientes a motor
-   * 28 dientes
+   * 46 dientes 
+   * 14 dientes a motor
    * 
    * reduccion 100
    * 
-   * 0.608695
+   * 3.285714
    * 
    */
 

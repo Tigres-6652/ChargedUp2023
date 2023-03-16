@@ -38,8 +38,8 @@ public class RobotContainer {
 
     new JoystickButton(XboxController_secondary, 1).toggleOnTrue(new GarraCmd(garraSusbsytem, () -> true));
 
-    brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5),
-        () -> XboxController_secondary.getRawAxis(1), () -> XboxController_secondary.getRawButton(1),
+    brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem, () -> XboxController_main.getRawAxis(5),
+        () -> XboxController_main.getRawAxis(1), () -> XboxController_secondary.getRawButton(1),
         () -> XboxController_secondary.getRawButton(2), () -> XboxController_secondary.getRawButton(3),
         () -> XboxController_secondary.getRawButton(4)));
     compuertasubsystem
