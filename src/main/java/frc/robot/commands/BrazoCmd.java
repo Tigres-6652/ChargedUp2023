@@ -30,6 +30,9 @@ public class BrazoCmd extends CommandBase {
 
   @Override
   public void initialize() {
+brazosubsystem.config_motor_eje_inf();
+brazosubsystem.config_motor_eje_sup();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,9 +43,17 @@ public class BrazoCmd extends CommandBase {
 
     } else if (BotonDerecha.get()) {
       
+brazosubsystem.movimiento_brazo_angulo(39,-84);// substation
+
     } else if (BotonArriba.get()) {
 
+      brazosubsystem.returnhome(BotonArriba.get());
+
+
     } else if (BotonIzquierda.get()) {
+
+      brazosubsystem.movimiento_brazo_angulo(73, -146);///dejar cono
+
 
     } else {
 
