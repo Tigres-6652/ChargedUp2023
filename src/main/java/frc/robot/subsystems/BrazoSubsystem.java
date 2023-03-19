@@ -32,18 +32,17 @@ public class BrazoSubsystem extends SubsystemBase {
 
   }
 
-  public void ejeinferior(double velocidadmotorinferior) {
-    // motejeabajo.set(TalonFXControlMode.Velocity, (velocidadpadarle) )
+  public void ejeinferior(double velinf) {  //movimiento con control
 
     if (limitejeinferior.get()) {
 
-      motejeabajo.set(velocidadmotorinferior);
+      motejeabajo.set(velinf);
 
-    } else if (!limitejeinferior.get() && velocidadmotorinferior < 0.001) {
+    } else if (!limitejeinferior.get() && velinf < 0.001) {
 
-      motejeabajo.set(velocidadmotorinferior);
+      motejeabajo.set(velinf);
 
-    } else if (!limitejeinferior.get() && velocidadmotorinferior > 0.001) {
+    } else if (!limitejeinferior.get() && velinf > 0.001) {
 
       motejeabajo.set(0);
 
@@ -56,7 +55,7 @@ public class BrazoSubsystem extends SubsystemBase {
     }
   }
 
-  public void ejesuperior(double velsup) {
+  public void ejesuperior(double velsup) { //movimiento con control
 
     if (limitejesuperior.get()) {
 
@@ -135,20 +134,37 @@ public class BrazoSubsystem extends SubsystemBase {
 public void movimiento_brazo_angulo(double gradosinferior, double gradosuperior){
 
 double movimientosuperior=(gradosEjeSuperior()-gradosuperior)*0.04;
-
-
-motejearriba.set(-movimientosuperior);
-
 double movimientoinferior=(gradosEjeInferior()-gradosinferior)*0.03;
 
-motejeabajo.set(movimientoinferior);
+
+double conversiontopesuperior;
+double conversiontopeinferior;
+
+
+if(gradosinferior>0.5){
+  conversiontopeinferior=0.5;
+}else{
+conversiontopeinferior=movimientoinferior;
+}
+
+
+if(gradosuperior>0.65){
+  conversiontopesuperior=0.65;
+}else{
+conversiontopesuperior=movimientosuperior;
+}
+
+
+motejearriba.set(-conversiontopesuperior);
+motejeabajo.set(conversiontopeinferior);
 
 }
 
 
 
 
-
+  //Configuracion de motores para que no se muevan mucho al momento de tener el robot encendido
+// *NO MOVERLE*
   public void config_motor_eje_inf() {
 
     motejeabajo.configNominalOutputForward(0, KPIDejeinferior.kTimeoutMs);
@@ -167,6 +183,8 @@ motejeabajo.set(movimientoinferior);
 
   }
 
+  //Configuracion de motores para que no se muevan mucho al momento de tener el robot encendido
+  // *NO MOVERLE*
   public void config_motor_eje_sup() {
 
     motejearriba.configNominalOutputForward(0, KPIDejesuperior.kTimeoutMs);

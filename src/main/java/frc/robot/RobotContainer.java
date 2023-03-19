@@ -34,25 +34,23 @@ public class RobotContainer {
   }
 
   private void Controles() {
-    driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem, () -> XboxController_main.getRawAxis(3) -
-        XboxController_main.getRawAxis(2), () -> XboxController_main.getRawAxis(0)));
-
+    driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem, () -> -XboxController_main.getRawAxis(1), () -> (XboxController_main.getRawAxis(3) -
+        XboxController_main.getRawAxis(2))*0.75));
 
     garraSusbsytem.setDefaultCommand(new GarraCmd(garraSusbsytem, () -> XboxController_main.getRawButtonPressed(1)));
 
-
-
     compresorSubsystem.setDefaultCommand(new CompresorCmd(compresorSubsystem, false));
-    brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem, () -> XboxController_main.getRawAxis(5),
-        () -> XboxController_main.getRawAxis(1), () -> XboxController_main.getRawButton(5),
-        () -> XboxController_main.getRawButton(3), () -> XboxController_secondary.getRawButton(1),
-        () -> XboxController_main.getRawButton(6)));
+
+    brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5),
+        () -> XboxController_secondary.getRawAxis(1), () -> XboxController_secondary.getRawButton(2),
+        () -> XboxController_secondary.getRawButton(5),
+        () -> XboxController_secondary.getRawButton(3), () -> XboxController_secondary.getRawButton(1),
+        () -> XboxController_secondary.getRawButton(6)));
+
     compuertasubsystem
         .setDefaultCommand(new CompuertaCmd(compuertasubsystem, () -> XboxController_main.getRawButton(2)));
 
-
-        //new JoystickButton(XboxController_main, 1).toggleOnTrue(new GarraCmd(garraSusbsytem, () -> true));
-        new JoystickButton(XboxController_main, 7).toggleOnTrue(new CompresorCmd(compresorSubsystem, true));
+    new JoystickButton(XboxController_main, 7).toggleOnTrue(new CompresorCmd(compresorSubsystem, true));
 
   }
 
