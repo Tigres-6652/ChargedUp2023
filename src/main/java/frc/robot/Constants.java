@@ -18,19 +18,25 @@ public class Constants {
 
         public static final class posicioncentrodemasaabajoydentroframe {
 
-            public static double ejesuperior;
-            public static double ejeinferior;
+            public static double ejesuperior=0;
+            public static double ejeinferior=35;
 
         }
 
         public static final class posiciondejarcono {
             public static double ejesuperior=-146;
-            public static double ejeinferior=73;
+            public static double ejeinferior=43;
         }
 
         public static final class DistanciaCono{
 
             public static double DistanciaDeteccion=105;
+        }
+
+        public static final class topesvelocidad{
+            public static double Superior=0.5;
+            public static double Inferior=0.3;
+
         }
 
     }

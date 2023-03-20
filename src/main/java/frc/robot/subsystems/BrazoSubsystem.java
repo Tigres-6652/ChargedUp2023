@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KPIDejeinferior;
 import frc.robot.Constants.KPIDejesuperior;
 import frc.robot.Constants.PUERTOSCAN;
+import frc.robot.Constants.posicionesbrazo.topesvelocidad;
 
 public class BrazoSubsystem extends SubsystemBase {
 
@@ -34,7 +35,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
   public void ejeinferior(double velinf) {  //movimiento con control
 
-    if (limitejeinferior.get()) {
+    if (limitejeinferior.get()&&gradosEjeInferior()<85) {
 
       motejeabajo.set(velinf);
 
@@ -46,18 +47,23 @@ public class BrazoSubsystem extends SubsystemBase {
 
       motejeabajo.set(0);
 
-      if (!limitejesuperior.get()) {
+    }else if(gradosEjeInferior()>80&&velinf < 0.001){
+      motejeabajo.set(0);
 
-        motejeabajo.setSelectedSensorPosition(0);
-
-      }
+    } else if(gradosEjeInferior()>80&&velinf > 0.001&&limitejeinferior.get()){
+      motejeabajo.set(velinf);
 
     }
+    if (!limitejeinferior.get()) {
+
+      motejeabajo.setSelectedSensorPosition(0);
+
+    } 
   }
 
   public void ejesuperior(double velsup) { //movimiento con control
 
-    if (limitejesuperior.get()) {
+    if (limitejesuperior.get()&&gradosEjeSuperior()>-280) {
 
       motejearriba.set(velsup);
 
@@ -67,6 +73,10 @@ public class BrazoSubsystem extends SubsystemBase {
 
     } else if (!limitejesuperior.get() && velsup > 0.001) {
 
+      motejearriba.set(0);
+    } else if(gradosEjeSuperior()<-280&&velsup>0.001&&limitejesuperior.get()){
+      motejearriba.set(velsup);
+    } else if(gradosEjeSuperior()<-280&&velsup<0.001&&limitejesuperior.get()){
       motejearriba.set(0);
 
     }
@@ -114,7 +124,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
       } else {
 
-        motejeabajo.set(0.5);
+        motejeabajo.set(0.4);
 
       }
 
@@ -123,7 +133,7 @@ public class BrazoSubsystem extends SubsystemBase {
         motejearriba.set(0);
 
       } else {
-        motejearriba.set(0.65);
+        motejearriba.set(0.4);
 
       }
 
@@ -141,17 +151,22 @@ double conversiontopesuperior;
 double conversiontopeinferior;
 
 
-if(gradosinferior>0.5){
-  conversiontopeinferior=0.5;
+if(movimientoinferior<-topesvelocidad.Inferior){
+  conversiontopeinferior=-topesvelocidad.Inferior;
+}else if(movimientoinferior>topesvelocidad.Inferior){
+  conversiontopeinferior=topesvelocidad.Inferior;
 }else{
-conversiontopeinferior=movimientoinferior;
+  conversiontopeinferior=movimientoinferior;
 }
 
 
-if(gradosuperior>0.65){
-  conversiontopesuperior=0.65;
+if(movimientosuperior>topesvelocidad.Superior){
+  conversiontopesuperior=topesvelocidad.Superior;
+}else if(movimientosuperior<-topesvelocidad.Superior){
+  conversiontopesuperior=-topesvelocidad.Superior;
 }else{
-conversiontopesuperior=movimientosuperior;
+  conversiontopesuperior=movimientosuperior;
+
 }
 
 
@@ -159,6 +174,23 @@ motejearriba.set(-conversiontopesuperior);
 motejeabajo.set(conversiontopeinferior);
 
 }
+
+
+public void ResetEncoderLimit(){
+
+  if (!limitejesuperior.get()) {
+
+    motejearriba.setSelectedSensorPosition(0);
+
+  }
+
+  if (!limitejeinferior.get()) {
+
+    motejeabajo.setSelectedSensorPosition(0);
+
+  }
+}
+
 
 
 

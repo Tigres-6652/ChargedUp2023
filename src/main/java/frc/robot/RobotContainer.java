@@ -28,9 +28,7 @@ public class RobotContainer {
   public Joystick XboxController_secondary = new Joystick(1);
 
   public RobotContainer() {
-
     Controles();
-
   }
 
   private void Controles() {
@@ -42,10 +40,10 @@ public class RobotContainer {
     compresorSubsystem.setDefaultCommand(new CompresorCmd(compresorSubsystem, false));
 
     brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5),
-        () -> XboxController_secondary.getRawAxis(1), () -> XboxController_secondary.getRawButton(2),
-        () -> XboxController_secondary.getRawButton(5),
-        () -> XboxController_secondary.getRawButton(3), () -> XboxController_secondary.getRawButton(1),
-        () -> XboxController_secondary.getRawButton(6)));
+        () -> XboxController_secondary.getRawAxis(1), () -> XboxController_secondary.getRawButton(6),
+        () -> XboxController_secondary.getRawButton(4),
+        () -> XboxController_secondary.getRawButton(2), () -> XboxController_secondary.getRawButton(1),
+        () -> XboxController_secondary.getRawButton(3)));
 
     compuertasubsystem
         .setDefaultCommand(new CompuertaCmd(compuertasubsystem, () -> XboxController_main.getRawButton(2)));

@@ -3,6 +3,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.posicionesbrazo.posicioncentrodemasaabajoydentroframe;
 import frc.robot.Constants.posicionesbrazo.posiciondejarcono;
@@ -38,7 +39,6 @@ public class BrazoCmd extends CommandBase {
   public void initialize() {
     brazosubsystem.config_motor_eje_inf();
     brazosubsystem.config_motor_eje_sup();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -73,7 +73,7 @@ public class BrazoCmd extends CommandBase {
       brazosubsystem.ejeinferior(0);
       brazosubsystem.ejesuperior(0);
     }
-
+SmartDashboard.putBoolean("desbloqueo", BotonDesbloqueo.get());
   }
 
   // Called once the command ends or is interrupted.

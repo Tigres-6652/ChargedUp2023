@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -13,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.posicionesbrazo.DistanciaCono;
 
-public class GarraSubsystem extends SubsystemBase {
+public class GarraSubsystem extends SubsystemBase {                   
 
   Solenoid pistongarra = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
