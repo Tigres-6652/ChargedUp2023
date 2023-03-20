@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KPIDejeinferior;
 import frc.robot.Constants.KPIDejesuperior;
 import frc.robot.Constants.PUERTOSCAN;
+import frc.robot.Constants.posicionesbrazo.topesvelocidad;
 
 public class BrazoSubsystem extends SubsystemBase {
 
@@ -32,33 +33,37 @@ public class BrazoSubsystem extends SubsystemBase {
 
   }
 
-  public void ejeinferior(double velocidadmotorinferior) {
-    // motejeabajo.set(TalonFXControlMode.Velocity, (velocidadpadarle) )
+  public void ejeinferior(double velinf) {  //movimiento con control
 
-    if (limitejeinferior.get()) {
+    if (limitejeinferior.get()&&gradosEjeInferior()<85) {
 
-      motejeabajo.set(velocidadmotorinferior);
+      motejeabajo.set(velinf);
 
-    } else if (!limitejeinferior.get() && velocidadmotorinferior < 0.001) {
+    } else if (!limitejeinferior.get() && velinf < 0.001) {
 
-      motejeabajo.set(velocidadmotorinferior);
+      motejeabajo.set(velinf);
 
-    } else if (!limitejeinferior.get() && velocidadmotorinferior > 0.001) {
+    } else if (!limitejeinferior.get() && velinf > 0.001) {
 
       motejeabajo.set(0);
 
-      if (!limitejesuperior.get()) {
+    }else if(gradosEjeInferior()>80&&velinf < 0.001){
+      motejeabajo.set(0);
 
-        motejeabajo.setSelectedSensorPosition(0);
-
-      }
+    } else if(gradosEjeInferior()>80&&velinf > 0.001&&limitejeinferior.get()){
+      motejeabajo.set(velinf);
 
     }
+    if (!limitejeinferior.get()) {
+
+      motejeabajo.setSelectedSensorPosition(0);
+
+    } 
   }
 
-  public void ejesuperior(double velsup) {
+  public void ejesuperior(double velsup) { //movimiento con control
 
-    if (limitejesuperior.get()) {
+    if (limitejesuperior.get()&&gradosEjeSuperior()>-280) {
 
       motejearriba.set(velsup);
 
@@ -68,6 +73,10 @@ public class BrazoSubsystem extends SubsystemBase {
 
     } else if (!limitejesuperior.get() && velsup > 0.001) {
 
+      motejearriba.set(0);
+    } else if(gradosEjeSuperior()<-280&&velsup>0.001&&limitejesuperior.get()){
+      motejearriba.set(velsup);
+    } else if(gradosEjeSuperior()<-280&&velsup<0.001&&limitejesuperior.get()){
       motejearriba.set(0);
 
     }
@@ -115,7 +124,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
       } else {
 
-        motejeabajo.set(0.5);
+        motejeabajo.set(0.4);
 
       }
 
@@ -124,7 +133,7 @@ public class BrazoSubsystem extends SubsystemBase {
         motejearriba.set(0);
 
       } else {
-        motejearriba.set(0.65);
+        motejearriba.set(0.4);
 
       }
 
@@ -135,20 +144,59 @@ public class BrazoSubsystem extends SubsystemBase {
 public void movimiento_brazo_angulo(double gradosinferior, double gradosuperior){
 
 double movimientosuperior=(gradosEjeSuperior()-gradosuperior)*0.04;
-
-
-motejearriba.set(-movimientosuperior);
-
 double movimientoinferior=(gradosEjeInferior()-gradosinferior)*0.03;
 
-motejeabajo.set(movimientoinferior);
 
+double conversiontopesuperior;
+double conversiontopeinferior;
+
+
+if(movimientoinferior<-topesvelocidad.Inferior){
+  conversiontopeinferior=-topesvelocidad.Inferior;
+}else if(movimientoinferior>topesvelocidad.Inferior){
+  conversiontopeinferior=topesvelocidad.Inferior;
+}else{
+  conversiontopeinferior=movimientoinferior;
+}
+
+
+if(movimientosuperior>topesvelocidad.Superior){
+  conversiontopesuperior=topesvelocidad.Superior;
+}else if(movimientosuperior<-topesvelocidad.Superior){
+  conversiontopesuperior=-topesvelocidad.Superior;
+}else{
+  conversiontopesuperior=movimientosuperior;
+
+}
+
+
+motejearriba.set(-conversiontopesuperior);
+motejeabajo.set(conversiontopeinferior);
+
+}
+
+
+public void ResetEncoderLimit(){
+
+  if (!limitejesuperior.get()) {
+
+    motejearriba.setSelectedSensorPosition(0);
+
+  }
+
+  if (!limitejeinferior.get()) {
+
+    motejeabajo.setSelectedSensorPosition(0);
+
+  }
 }
 
 
 
 
 
+  //Configuracion de motores para que no se muevan mucho al momento de tener el robot encendido
+// *NO MOVERLE*
   public void config_motor_eje_inf() {
 
     motejeabajo.configNominalOutputForward(0, KPIDejeinferior.kTimeoutMs);
@@ -167,6 +215,8 @@ motejeabajo.set(movimientoinferior);
 
   }
 
+  //Configuracion de motores para que no se muevan mucho al momento de tener el robot encendido
+  // *NO MOVERLE*
   public void config_motor_eje_sup() {
 
     motejearriba.configNominalOutputForward(0, KPIDejesuperior.kTimeoutMs);
