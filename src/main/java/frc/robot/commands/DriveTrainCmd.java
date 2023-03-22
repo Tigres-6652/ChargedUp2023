@@ -8,12 +8,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DriveTrainCmd extends CommandBase {
   private final DriveSubsystem driveSubsystem;
   private Supplier<Double> funciongiro, funcionVelocidad;
+  private Supplier<Boolean> autoapuntado,apuntadoagarrar,balanceo;
 
-  public DriveTrainCmd(DriveSubsystem driveSubsystem, Supplier<Double> funcionVelocidad, Supplier<Double> funciongiro) {
+  public DriveTrainCmd(DriveSubsystem driveSubsystem, Supplier<Double> funcionVelocidad, Supplier<Double> funciongiro,
+      Supplier<Boolean> autoapuntado, Supplier<Boolean> balanceo, Supplier <Boolean> apuntadoagarrar) {
 
     this.funcionVelocidad = funcionVelocidad;
     this.funciongiro = funciongiro;
-
+    this.autoapuntado = autoapuntado;
+    this.balanceo = balanceo;
+    this.apuntadoagarrar=apuntadoagarrar;
 
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
@@ -29,14 +33,13 @@ public class DriveTrainCmd extends CommandBase {
   @Override
   public void execute() {
 
-    driveSubsystem.CHASIS(funcionVelocidad.get(), funciongiro.get());
-    
+    driveSubsystem.CHASIS(funcionVelocidad.get(), funciongiro.get(), autoapuntado.get(), balanceo.get(), apuntadoagarrar.get());
+
   }
 
   @Override
   public void end(boolean interrupted) {
 
-    
   }
 
   @Override

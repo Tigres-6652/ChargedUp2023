@@ -11,11 +11,11 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.Auto.DrivetrainRamseteCommand;
 
 
-public class PlantillaAuto extends SequentialCommandGroup {
+public class mobility extends SequentialCommandGroup {
  
-  private static final Trajectory Trajectory_test = PathPlanner.loadPath("testpath", Constants.AutoConstants.kMaxSpeedMetersPerSecond , Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+  private static final Trajectory Trajectory_test = PathPlanner.loadPath("movility", Constants.AutoConstants.kMaxSpeedMetersPerSecond , Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
   
-  public PlantillaAuto() {
+  public mobility() {
     
     addCommands(
 

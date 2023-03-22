@@ -18,7 +18,10 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AjustesMovimientoChasis;
 import frc.robot.Constants.PUERTOSCAN;
+import frc.robot.Constants.AjustesMovimientoChasis.autoapuntado;
+import frc.robot.Constants.AjustesMovimientoChasis.val_Balanceo;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -41,12 +44,21 @@ public class DriveSubsystem extends SubsystemBase {
   NetworkTableEntry ty = table.getEntry("ty");
   NetworkTableEntry ta = table.getEntry("ta");
 
+  double ajustdist;
+  double ajutGi;
+
   // control
   Joystick joystick = new Joystick(0);
+
+  double cambiovel1;
+  double cambiovel2;
 
   // path
   AHRS m_gyro = new AHRS(SPI.Port.kMXP); // navx
   DifferentialDriveOdometry m_odometry;
+
+  //Balanceo
+  double velocidadbalanceo;
 
   @Override
   public void periodic() {
@@ -54,11 +66,14 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.update(
         m_gyro.getRotation2d(), getRightEncoderdistance(), getLeftEncoderdistance());
 
-    SmartDashboard.putNumber("encizq", MCI1ENC.getSelectedSensorPosition() / 4096 / 9.01);
-    SmartDashboard.putNumber("encizq", getLeftEncoderdistance());
+    /*SmartDashboard.putNumber("encizq", getLeftEncoderdistance());
     SmartDashboard.putNumber("encder", getRightEncoderdistance());
-    SmartDashboard.putNumber("gyro", getHeading());
-    SmartDashboard.putNumber("velocity", -MCD4ENC.getSelectedSensorVelocity() / 4096 / 9.01 * 10);
+    SmartDashboard.putNumber("getTurnRate", getTurnRate());
+    SmartDashboard.putNumber("getheading", getHeading());
+
+    SmartDashboard.putNumber("velocidad", (MCI1ENC.getSelectedSensorVelocity() / 4096 * Math.PI * 6 * 10 * 2.54 / 100));*/
+
+    SmartDashboard.putNumber("Angulo Balanceo", m_gyro.getRoll());
 
   }
 
@@ -140,20 +155,103 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  public void CHASIS(double velocidad, double giro) {
-
-    chasis.arcadeDrive(velocidad, -giro);
+  public void CHASIS(double velocidad, double giro, boolean autoapuntado, boolean balanceo, boolean apuntadoagarrar) {
 
     double calculo_encizq;
     double calculo_encder;
 
-    calculo_encizq = (-MCI1ENC.getSelectedSensorPosition() / 4096 / 2);
-    calculo_encder = (MCD4ENC.getSelectedSensorPosition() / 4096 / 2);
+    calculo_encizq = (-MCI1ENC.getSelectedSensorPosition() / 4096 * Math.PI * 6 * 2.54);
+    calculo_encder = (-MCD4ENC.getSelectedSensorPosition() / 4096 * Math.PI * 6 * 2.54);
 
-    SmartDashboard.putNumber("encoderizquierdo", calculo_encizq);
-    SmartDashboard.putNumber("encoderderecho", calculo_encder);
+    /*
+     * SmartDashboard.putNumber("encoderizquierdo", calculo_encizq);
+     * SmartDashboard.putNumber("encoderderecho", calculo_encder);
+     * 
+     * SmartDashboard.putNumber("avgDist", (calculo_encder + calculo_encizq) / 2);
+     */
 
-    SmartDashboard.putNumber("avgDist", (calculo_encder + calculo_encizq) / 2);
+    if (autoapuntado) {
+
+      double x = tx.getDouble(0.0);
+
+      double girokp=frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.girokp;
+      double GiroError= x;
+      double ajustegiro=girokp*GiroError;
+
+
+
+
+      // distancia
+      double y = ty.getDouble(0.0);
+
+      double distanciaKP = -AjustesMovimientoChasis.autoapuntado.distanciakp;
+      double DistanciaError = y;
+      double ajustedistancia = distanciaKP * DistanciaError;
+
+      if (ajustedistancia > 0.55) {
+
+        ajustdist = 0.55;
+
+      } else if (ajustedistancia < 0.55 && ajustedistancia > -0.55) {
+
+        ajustdist = ajustedistancia;
+
+      } else if (ajustedistancia < -0.55) {
+
+        ajustdist = -0.55;
+
+      }
+
+      if (ajustegiro > 0.4) {
+
+        ajutGi = 0.4;
+
+      } else if (ajustegiro < 0.4 && ajustegiro > -0.4) {
+
+        ajutGi = ajustegiro;
+
+      } else if (ajustegiro < -0.4) {
+
+        ajutGi = -0.4;
+
+      }
+
+      chasis.arcadeDrive(ajustdist, -ajutGi*1.4);
+
+    } else if (balanceo) {
+
+     double angulo_equilibrio= m_gyro.getRoll();
+
+     double vel=angulo_equilibrio*val_Balanceo.kp;
+
+      if(vel>val_Balanceo.velocidadmaxima){
+        velocidadbalanceo=val_Balanceo.velocidadmaxima;
+      }else{
+        velocidadbalanceo=vel;
+
+      }
+      if(vel<-val_Balanceo.velocidadmaxima){
+        velocidadbalanceo=-val_Balanceo.velocidadmaxima;
+      }else{
+velocidadbalanceo=vel;
+      }
+
+chasis.arcadeDrive(velocidadbalanceo, 0);
+    } else {
+
+      if (apuntadoagarrar) {
+
+        cambiovel1 = 0.75;
+        cambiovel2 = 0.75;
+      } else {
+        cambiovel1 = 1;
+        cambiovel2 = 1;
+      }
+
+      chasis.arcadeDrive(velocidad * cambiovel1, -giro * cambiovel2);
+
+    }
+
   }
 
   public Pose2d getPose() {
@@ -161,8 +259,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(-MCI1ENC.getSelectedSensorVelocity() / 4096 / 9.01 * 10,
-        MCD4ENC.getSelectedSensorVelocity() / 4096 / 9.01 * 10);
+    return new DifferentialDriveWheelSpeeds(
+        (MCI1ENC.getSelectedSensorVelocity() / 4096 * Math.PI * 6 * 10 * 2.54 / 100),
+        (MCD4ENC.getSelectedSensorVelocity() / 4096 * Math.PI * 6 * 10 * 2.54 / 100));
   }
 
   public void resetEncoders() {
@@ -181,23 +280,26 @@ public class DriveSubsystem extends SubsystemBase {
     MCD4ENC.configFactoryDefault();
     MCD5.configFactoryDefault();
     MCD6.configFactoryDefault();
+    m_gyro.calibrate();
 
   }
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     // m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+
+    zeroHeading();
     m_odometry.resetPosition(getRotation2d(), getLeftEncoderdistance(), getRightEncoderdistance(), pose);
   }
 
   public void arcadeDrive(double fwd, double rot) {
 
-    chasis.arcadeDrive(fwd, rot);
+    chasis.arcadeDrive(fwd, -rot);
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    MCI1ENC.setVoltage(leftVolts);
-    MCD4ENC.setVoltage(rightVolts);
+    motsizq.setVoltage(leftVolts);
+    motsder.setVoltage(rightVolts);
     chasis.feed();
   }
 
@@ -206,11 +308,11 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getLeftEncoderdistance() {
-    return -MCI1ENC.getSelectedSensorPosition() / 4096 / 9.01;
+    return (MCI1ENC.getSelectedSensorPosition() / 4096 * Math.PI * 6 * 2.54) / 100;
   }
 
   public double getRightEncoderdistance() {
-    return MCD4ENC.getSelectedSensorPosition() / 4096 / 9.01;
+    return (MCD4ENC.getSelectedSensorPosition() / 4096 * Math.PI * 6 * 2.54) / 100;
   }
 
   public void setMaxOutput(double maxOutput) {
@@ -222,11 +324,11 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
+    return -m_gyro.getRotation2d().getDegrees();
   }
 
   public double getTurnRate() {
-    return -m_gyro.getRate();
+    return m_gyro.getRate();
   }
 
   public Rotation2d getRotation2d() {

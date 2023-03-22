@@ -4,27 +4,19 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.ColorSensorV3;
-
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.posicionesbrazo.DistanciaCono;
 
-public class GarraSubsystem extends SubsystemBase {                   
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class GarraSubsystem extends SubsystemBase {
 
   Solenoid pistongarra = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
-  I2C.Port iPort = I2C.Port.kOnboard;
+  
 
-  ColorSensorV3 sensorcolor = new ColorSensorV3(iPort);
-
+  
   boolean conoengarra;
-  boolean statepiston;
-  boolean boton;
 
   public GarraSubsystem() {
   }
@@ -32,31 +24,20 @@ public class GarraSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    SmartDashboard.putBoolean("SensorProximidad", conoengarra);
-    SmartDashboard.putNumber("Proximidad Cono", sensorcolor.getProximity());
 
   }
 
-  public void pistongarrastate(boolean stateboton) {
+  public void pistongarrastate(boolean abre, boolean cierra) {
 
-    if (conoengarra || stateboton) {
-      if (statepiston) {
-      }
-      statepiston = false;
-    }
-
-    if (stateboton && !statepiston) {
-      statepiston = true;
-      pistongarra.set(true);
-      Timer.delay(0.45);
-    }
-
-    if (sensorcolor.getProximity() > DistanciaCono.DistanciaDeteccion) {
-      conoengarra = true;
-    } else {
+    if (( cierra)) {
+      pistongarra.set(false);
       conoengarra = false;
     }
-    pistongarra.set(statepiston);
+
+    if (abre ) {
+      pistongarra.set(true);
+      conoengarra = false;
+    }
 
   }
 }

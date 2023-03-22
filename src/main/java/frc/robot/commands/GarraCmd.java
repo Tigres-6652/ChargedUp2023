@@ -9,11 +9,12 @@ import frc.robot.subsystems.GarraSubsystem;
 public class GarraCmd extends CommandBase {
 
   public final GarraSubsystem garraSubsystem;
-  private Supplier<Boolean> state;
+  private Supplier<Boolean> abre, cierra;
 
-  public GarraCmd(GarraSubsystem garraSubsystem, Supplier <Boolean> state) {
+  public GarraCmd(GarraSubsystem garraSubsystem, Supplier <Boolean> abre,Supplier <Boolean> cierra) {
 
-this.state=state;
+this.abre=abre;
+this.cierra=cierra;
 this.garraSubsystem=garraSubsystem;
 addRequirements(garraSubsystem);
 
@@ -29,7 +30,7 @@ addRequirements(garraSubsystem);
 
 
 
-garraSubsystem.pistongarrastate(state.get());
+garraSubsystem.pistongarrastate(abre.get(),cierra.get());
 
   }
 
