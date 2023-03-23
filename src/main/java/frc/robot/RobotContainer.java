@@ -69,10 +69,10 @@ if(controles_angel){
     brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem,
         () -> XboxController_secondary.getRawAxis(5),    //control brazo inferior
         () -> XboxController_secondary.getRawAxis(1),    //control brazo superior
-        () -> XboxController_secondary.getRawButton(6),//boton desbloqueo
+        () -> XboxController_secondary.getRawButton(6),//boton desbloqueo_mover joints con joystick
         () -> XboxController_secondary.getRawButton(4),//return home
         () -> XboxController_secondary.getRawButton(2),//substation
-        () -> XboxController_secondary.getRawButton(1),//centro de masa
+        () -> XboxController_secondary.getRawButton(1),//centro de masa_brazo dentro de frame
         () -> XboxController_secondary.getRawButton(3)//dejar cono
         ));
 
