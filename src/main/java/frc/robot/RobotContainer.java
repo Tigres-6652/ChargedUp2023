@@ -54,9 +54,9 @@ if(controles_angel){
   driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
   () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // Velocidad
   () -> -XboxController_main.getRawAxis(0), // giro
-  () -> XboxController_main.getRawButton(2), // boton autoapuntado
+  () -> XboxController_main.getRawButton(2), // boton autoapuntado limelight
   () -> XboxController_main.getRawButton(3), // boton balanceo
-  () -> XboxController_main.getRawButton(1))); // boton autoapuntado
+  () -> XboxController_main.getRawButton(1))); // boton apuntado substation
 }
 
 
@@ -67,13 +67,14 @@ if(controles_angel){
     compresorSubsystem.setDefaultCommand(new CompresorCmd(compresorSubsystem, false)); //No moverle
 
     brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem,
-        () -> XboxController_secondary.getRawAxis(5),
-        () -> XboxController_secondary.getRawAxis(1),
-        () -> XboxController_secondary.getRawButton(6),
-        () -> XboxController_secondary.getRawButton(4),
-        () -> XboxController_secondary.getRawButton(2),
-        () -> XboxController_secondary.getRawButton(1),
-        () -> XboxController_secondary.getRawButton(3)));
+        () -> XboxController_secondary.getRawAxis(5),    //control brazo inferior
+        () -> XboxController_secondary.getRawAxis(1),    //control brazo superior
+        () -> XboxController_secondary.getRawButton(6),//boton desbloqueo
+        () -> XboxController_secondary.getRawButton(4),//return home
+        () -> XboxController_secondary.getRawButton(2),//substation
+        () -> XboxController_secondary.getRawButton(1),//centro de masa
+        () -> XboxController_secondary.getRawButton(3)//dejar cono
+        ));
 
     compuertasubsystem
         .setDefaultCommand(new CompuertaCmd(compuertasubsystem,
