@@ -33,6 +33,8 @@ public class RobotContainer {
 
   private static SendableChooser<Command> autoChooser = new SendableChooser<>();
 
+  boolean controles_angel=false;    //Cambiar variable si maneja Angel
+
   public RobotContainer() {
     Controles();
   }
@@ -40,18 +42,29 @@ public class RobotContainer {
   private void Controles() {
 
     configureAuto();
+if(controles_angel){
+  driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
+  () -> -XboxController_main.getRawAxis(1), // Velocidad
+  () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // giro
+  () -> XboxController_main.getRawButton(2), // boton autoapuntado
+  () -> XboxController_main.getRawButton(3), // boton balanceo
+  () -> XboxController_main.getRawButton(1))); // boton autoapuntado
 
-    driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
-        () -> -XboxController_main.getRawAxis(1),
-        () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)),
-        () -> XboxController_main.getRawButton(2),
-        () -> XboxController_main.getRawButton(3),
-        () -> XboxController_main.getRawButton(1)));
+}else{
+  driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
+  () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // Velocidad
+  () -> -XboxController_main.getRawAxis(0), // giro
+  () -> XboxController_main.getRawButton(2), // boton autoapuntado
+  () -> XboxController_main.getRawButton(3), // boton balanceo
+  () -> XboxController_main.getRawButton(1))); // boton autoapuntado
+}
 
-    garraSusbsytem.setDefaultCommand(new GarraCmd(garraSusbsytem, () -> XboxController_main.getRawButtonPressed(5),
-        () -> XboxController_main.getRawButtonPressed(6)));
 
-    compresorSubsystem.setDefaultCommand(new CompresorCmd(compresorSubsystem, false));
+    garraSusbsytem.setDefaultCommand(new GarraCmd(garraSusbsytem,
+        () -> XboxController_main.getRawButtonPressed(5), //boton abre
+        () -> XboxController_main.getRawButtonPressed(6))); //boton cierra
+
+    compresorSubsystem.setDefaultCommand(new CompresorCmd(compresorSubsystem, false)); //No moverle
 
     brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem,
         () -> XboxController_secondary.getRawAxis(5),

@@ -73,7 +73,7 @@ public class BrazoCmd extends CommandBase {
       brazosubsystem.ejeinferior(0);
       brazosubsystem.ejesuperior(0);
     }
-SmartDashboard.putBoolean("desbloqueo", BotonDesbloqueo.get());
+    SmartDashboard.putBoolean("desbloqueo", BotonDesbloqueo.get());
   }
 
   // Called once the command ends or is interrupted.
