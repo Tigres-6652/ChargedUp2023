@@ -188,35 +188,35 @@ public class DriveSubsystem extends SubsystemBase {
       double DistanciaError = y;
       double ajustedistancia = distanciaKP * DistanciaError;
 
-      if (ajustedistancia > 0.55) {
+      if (ajustedistancia > frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias) {
 
-        ajustdist = 0.55;
+        ajustdist = frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias;
 
-      } else if (ajustedistancia < 0.55 && ajustedistancia > -0.55) {
+      } else if (ajustedistancia < frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias && ajustedistancia > -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias) {
 
         ajustdist = ajustedistancia;
 
-      } else if (ajustedistancia < -0.55) {
+      } else if (ajustedistancia < -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias) {
 
-        ajustdist = -0.55;
+        ajustdist = -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias;
 
       }
 
-      if (ajustegiro > 0.4) {
+      if (ajustegiro > frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro) {
 
-        ajutGi = 0.4;
+        ajutGi = frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro;
 
-      } else if (ajustegiro < 0.4 && ajustegiro > -0.4) {
+      } else if (ajustegiro < frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro && ajustegiro > -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro) {
 
         ajutGi = ajustegiro;
 
-      } else if (ajustegiro < -0.4) {
+      } else if (ajustegiro < -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro) {
 
-        ajutGi = -0.4;
+        ajutGi = -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro;
 
       }
 
-      chasis.arcadeDrive(ajustdist, -ajutGi*1.4);
+      chasis.arcadeDrive(ajustdist, -ajutGi);
 
     } else if (balanceo) {
 

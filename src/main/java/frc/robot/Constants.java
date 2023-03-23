@@ -11,46 +11,46 @@ public class Constants {
 
         public static final class posiciondoublesubstation {
 
-            public static double ejesuperior=-112;
-            public static double ejeinferior=0;
-        
+            public static double ejesuperior = -112;
+            public static double ejeinferior = 0;
+
         }
 
         public static final class posicioncentrodemasaabajoydentroframe {
 
-            public static double ejesuperior=-35;
-            public static double ejeinferior=0;
+            public static double ejesuperior = -35;
+            public static double ejeinferior = 0;
 
         }
 
         public static final class posiciondejarcono {
-            public static double ejesuperior=-130;
-            public static double ejeinferior=20;
+            public static double ejesuperior = -130;
+            public static double ejeinferior = 20;
         }
 
-        public static final class topesvelocidad{
-            public static double Superior=0.5;
-            public static double Inferior=0.3;
+        public static final class topesvelocidad {
+            public static double Superior = 0.5;
+            public static double Inferior = 0.3;
 
         }
     }
 
-public static final class AjustesMovimientoChasis{
+    public static final class AjustesMovimientoChasis {
 
-public static final class val_Balanceo{
-    public static double velocidadmaxima=0.5;
-    public static double kp=0.05;
-}
+        public static final class val_Balanceo {
+            public static double velocidadmaxima = 0.5;
+            public static double kp = 0.05;
+        }
 
-public static class autoapuntado{
-public static double girokp=0.095;
-public static double distanciakp=-0.095;
-}
+        public static class autoapuntado {
+            public static double girokp = 0.095;
+            public static double distanciakp = -0.095;
 
+            public static double vel_max_giro=0.4;
+            public static double vel_max_distancias=0.5;
+        }
 
-
-}
-
+    }
 
     // PUERTOS DE LOS MOTORES CAN
     public static final class PUERTOSCAN {
@@ -87,7 +87,7 @@ public static double distanciakp=-0.095;
     // NO MOVERLE AL MENOS SI HICISTE EL TUNEO DE PID CON SYSTEM IDENTIFICATION TOOL
     public static final class KPIDchasis {
         public static final int kSlotIdx = 0;
-        
+
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
         public final static GainsDT kGains_Velocit = new GainsDT(2.0033, 0.000, 0.005, 1023.0 / 20660.0, 300,

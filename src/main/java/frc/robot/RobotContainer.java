@@ -84,7 +84,8 @@ if(controles_angel){
 
   public void configureAuto() {
 
-    autoChooser.setDefaultOption("Auto test 1", new mobility());
+    autoChooser.setDefaultOption("Null autonomous", null);
+    autoChooser.addOption("Mobility", new mobility());
     autoChooser.addOption("ONE_GP_balanceo", new ONE_GP_balanceo());
     autoChooser.addOption("One_GP_mobility", new ONE_GP_mobility());
     SmartDashboard.putData("Autonomous", autoChooser);
