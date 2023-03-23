@@ -9,14 +9,14 @@ public class Constants {
 
     public static final class posicionesbrazo {
 
-        public static final class posiciondoublesubstation {
+        public static final class posiciondoublesubstation { //teleop
 
             public static double ejesuperior = -112;
             public static double ejeinferior = 0;
 
         }
 
-        public static final class posicioncentrodemasaabajoydentroframe {
+        public static final class posicioncentrodemasaabajoydentroframe { //teleop
 
             public static double ejesuperior = -35;
             public static double ejeinferior = 0;
@@ -42,7 +42,7 @@ public class Constants {
             public static double kp = 0.05;
         }
 
-        public static class autoapuntado {
+        public static class autoapuntado { //limelight
             public static double girokp = 0.095;
             public static double distanciakp = -0.095;
 
