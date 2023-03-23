@@ -11,6 +11,7 @@ import frc.robot.commands.CompresorCmd;
 import frc.robot.commands.CompuertaCmd;
 import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.GarraCmd;
+import frc.robot.commands.Auto.auto_config.ONE_GP_balanceo;
 import frc.robot.commands.Auto.auto_config.ONE_GP_mobility;
 import frc.robot.commands.Auto.auto_config.mobility;
 import frc.robot.subsystems.BrazoSubsystem;
@@ -40,29 +41,30 @@ public class RobotContainer {
 
     configureAuto();
 
-    driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem, 
+    driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
         () -> -XboxController_main.getRawAxis(1),
         () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)),
         () -> XboxController_main.getRawButton(2),
-        ()-> XboxController_main.getRawButton(3),
-        ()-> XboxController_main.getRawButton(1)));
+        () -> XboxController_main.getRawButton(3),
+        () -> XboxController_main.getRawButton(1)));
 
-    garraSusbsytem.setDefaultCommand(new GarraCmd(garraSusbsytem, () -> XboxController_main.getRawButtonPressed(5), ()->XboxController_main.getRawButtonPressed(6)));
+    garraSusbsytem.setDefaultCommand(new GarraCmd(garraSusbsytem, () -> XboxController_main.getRawButtonPressed(5),
+        () -> XboxController_main.getRawButtonPressed(6)));
 
     compresorSubsystem.setDefaultCommand(new CompresorCmd(compresorSubsystem, false));
 
-    brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem, 
+    brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem,
         () -> XboxController_secondary.getRawAxis(5),
-        () -> XboxController_secondary.getRawAxis(1), 
+        () -> XboxController_secondary.getRawAxis(1),
         () -> XboxController_secondary.getRawButton(6),
         () -> XboxController_secondary.getRawButton(4),
-        () -> XboxController_secondary.getRawButton(2), 
+        () -> XboxController_secondary.getRawButton(2),
         () -> XboxController_secondary.getRawButton(1),
         () -> XboxController_secondary.getRawButton(3)));
 
     compuertasubsystem
-        .setDefaultCommand(new CompuertaCmd(compuertasubsystem, 
-        () -> XboxController_secondary.getRawButton(5)));
+        .setDefaultCommand(new CompuertaCmd(compuertasubsystem,
+            () -> XboxController_secondary.getRawButton(5)));
 
     new JoystickButton(XboxController_main, 7).toggleOnTrue(new CompresorCmd(compresorSubsystem, true));
   }
@@ -70,11 +72,10 @@ public class RobotContainer {
   public void configureAuto() {
 
     autoChooser.setDefaultOption("Auto test 1", new mobility());
-    autoChooser.addOption("ONE_GP_individual", new ONE_GP_mobility());
-
+    autoChooser.addOption("ONE_GP_balanceo", new ONE_GP_balanceo());
+    autoChooser.addOption("One_GP_mobility", new ONE_GP_mobility());
     SmartDashboard.putData("Autonomous", autoChooser);
   }
-
 
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();

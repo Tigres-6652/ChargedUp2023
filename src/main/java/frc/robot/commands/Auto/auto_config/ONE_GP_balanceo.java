@@ -16,9 +16,7 @@ import frc.robot.commands.BrazoCmd;
 import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.GarraCmd;
 import frc.robot.commands.Auto.DrivetrainRamseteCommand;
-import frc.robot.subsystems.BrazoSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.GarraSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -26,8 +24,6 @@ import frc.robot.subsystems.GarraSubsystem;
 public class ONE_GP_balanceo extends SequentialCommandGroup {
 
 DriveSubsystem driveSubsystem=new DriveSubsystem();
-public final static BrazoSubsystem brazosubsystem = new BrazoSubsystem();
-public final static GarraSubsystem garrasubsystem=new GarraSubsystem();
 
 private static final Trajectory chargestation = PathPlanner.loadPath("ONE_GP_balanceo", Constants.AutoConstants.kMaxSpeedMetersPerSecond , Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
 
@@ -36,9 +32,9 @@ private static final Trajectory chargestation = PathPlanner.loadPath("ONE_GP_bal
 
     addCommands(
 
-    new ParallelDeadlineGroup(new BrazoCmd(brazosubsystem, ()->0.0, ()->0.0, ()->false, ()->false, ()->false, ()->false, ()->true), new WaitCommand(4)),
-    new ParallelDeadlineGroup(new GarraCmd(garrasubsystem, ()->true, ()->false), new WaitCommand(1)),
-    new ParallelDeadlineGroup(new BrazoCmd(brazosubsystem, ()->0.0, ()->0.0, ()->false, ()->true, ()->false, ()->false, ()->true)),
+    new ParallelDeadlineGroup(new BrazoCmd(RobotContainer.brazosubsystem, ()->0.0, ()->0.0, ()->false, ()->false, ()->false, ()->false, ()->true), new WaitCommand(4)),
+    new ParallelDeadlineGroup(new GarraCmd(RobotContainer.garraSusbsytem, ()->true, ()->false), new WaitCommand(1)),
+    new ParallelDeadlineGroup(new BrazoCmd(RobotContainer.brazosubsystem, ()->0.0, ()->0.0, ()->false, ()->true, ()->false, ()->false, ()->true)),
     new ParallelDeadlineGroup(new DrivetrainRamseteCommand(RobotContainer.driveSubsystem, chargestation) .robotRelative()),
     new ParallelDeadlineGroup(new DriveTrainCmd(driveSubsystem, ()->0.0, ()->0.0, ()->false, ()->true, ()->false))
 
