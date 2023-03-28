@@ -11,6 +11,11 @@
           "open": true
         }
       },
+      "Talon FX[7]/Integrated Sensor": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon SRX[1]": {
         "header": {
           "open": true

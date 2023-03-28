@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -240,12 +241,23 @@ chasis.arcadeDrive(velocidadbalanceo, 0);
     } else {
 
       if (apuntadoagarrar) {
-
-        cambiovel1 = 0.75;
-        cambiovel2 = 0.75;
+        MCI1ENC.setNeutralMode(NeutralMode.Brake);
+        MCI2.setNeutralMode(NeutralMode.Brake);
+        MCI3.setNeutralMode(NeutralMode.Brake);
+        MCD4ENC.setNeutralMode(NeutralMode.Brake);
+        MCD5.setNeutralMode(NeutralMode.Brake);
+        MCD6.setNeutralMode(NeutralMode.Brake);
+        cambiovel1 = 0.9;
+        cambiovel2 = 0.9;
       } else {
-        cambiovel1 = 1;
-        cambiovel2 = 1;
+        MCI1ENC.setNeutralMode(NeutralMode.Coast);
+        MCI2.setNeutralMode(NeutralMode.Coast);
+        MCI3.setNeutralMode(NeutralMode.Coast);
+        MCD4ENC.setNeutralMode(NeutralMode.Coast);
+        MCD5.setNeutralMode(NeutralMode.Coast);
+        MCD6.setNeutralMode(NeutralMode.Coast);
+        cambiovel1 = .9;
+        cambiovel2 = .9;
       }
 
       chasis.arcadeDrive(velocidad * cambiovel1, -giro * cambiovel2);

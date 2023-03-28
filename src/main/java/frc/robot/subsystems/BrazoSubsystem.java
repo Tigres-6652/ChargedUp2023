@@ -35,7 +35,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
   public void ejeinferior(double velinf) {  //movimiento con control
 
-    if (limitejeinferior.get()&&gradosEjeInferior()<85) {
+    if (limitejeinferior.get()&&gradosEjeInferior()<70) {
 
       motejeabajo.set(velinf);
 
@@ -47,10 +47,10 @@ public class BrazoSubsystem extends SubsystemBase {
 
       motejeabajo.set(0);
 
-    }else if(gradosEjeInferior()>80&&velinf < 0.001){
+    }else if(gradosEjeInferior()>70&&velinf < 0.001){
       motejeabajo.set(0);
 
-    } else if(gradosEjeInferior()>80&&velinf > 0.001&&limitejeinferior.get()){
+    } else if(gradosEjeInferior()>70&&velinf > 0.001&&limitejeinferior.get()){
       motejeabajo.set(velinf);
 
     }
@@ -63,7 +63,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
   public void ejesuperior(double velsup) { //movimiento con control
 
-    if (limitejesuperior.get()&&gradosEjeSuperior()>-280) {
+    if (limitejesuperior.get()&&gradosEjeSuperior()>-250) {
 
       motejearriba.set(velsup);
 
@@ -74,9 +74,9 @@ public class BrazoSubsystem extends SubsystemBase {
     } else if (!limitejesuperior.get() && velsup > 0.001) {
 
       motejearriba.set(0);
-    } else if(gradosEjeSuperior()<-280&&velsup>0.001&&limitejesuperior.get()){
+    } else if(gradosEjeSuperior()<-250&&velsup>0.001&&limitejesuperior.get()){
       motejearriba.set(velsup);
-    } else if(gradosEjeSuperior()<-280&&velsup<0.001&&limitejesuperior.get()){
+    } else if(gradosEjeSuperior()<-250&&velsup<0.001&&limitejesuperior.get()){
       motejearriba.set(0);
 
     }
@@ -199,19 +199,19 @@ public void ResetEncoderLimit(){
 // *NO MOVERLE*
   public void config_motor_eje_inf() {
 
-    motejeabajo.configNominalOutputForward(0, KPIDejeinferior.kTimeoutMs);
-    motejeabajo.configNominalOutputReverse(0, KPIDejeinferior.kTimeoutMs);
-    motejeabajo.configPeakOutputForward(1, KPIDejeinferior.kTimeoutMs);
-    motejeabajo.configPeakOutputReverse(-1, KPIDejeinferior.kTimeoutMs);
-    /* Config the Velocity closed loop gains in slot0 */
-    motejeabajo.config_kF(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.kF,
-        KPIDejeinferior.kTimeoutMs);
-    motejeabajo.config_kP(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.KP,
-        KPIDejeinferior.kTimeoutMs);
-    motejeabajo.config_kI(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.kI,
-        KPIDejeinferior.kTimeoutMs);
-    motejeabajo.config_kD(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.kD,
-        KPIDejeinferior.kTimeoutMs);
+      motejeabajo.configNominalOutputForward(0, KPIDejeinferior.kTimeoutMs);
+      motejeabajo.configNominalOutputReverse(0, KPIDejeinferior.kTimeoutMs);
+      motejeabajo.configPeakOutputForward(1, KPIDejeinferior.kTimeoutMs);
+      motejeabajo.configPeakOutputReverse(-1, KPIDejeinferior.kTimeoutMs);
+      /* Config the Velocity closed loop gains in slot0 */
+      motejeabajo.config_kF(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.kF,
+          KPIDejeinferior.kTimeoutMs);
+      motejeabajo.config_kP(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.KP,
+          KPIDejeinferior.kTimeoutMs);
+      motejeabajo.config_kI(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.kI,
+          KPIDejeinferior.kTimeoutMs);
+      motejeabajo.config_kD(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.kD,
+          KPIDejeinferior.kTimeoutMs);
 
   }
 

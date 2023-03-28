@@ -13,6 +13,7 @@ import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.GarraCmd;
 import frc.robot.commands.Auto.auto_config.ONE_GP_balanceo;
 import frc.robot.commands.Auto.auto_config.ONE_GP_mobility;
+import frc.robot.commands.Auto.auto_config.UNA_GP;
 import frc.robot.commands.Auto.auto_config.mobility;
 import frc.robot.subsystems.BrazoSubsystem;
 import frc.robot.subsystems.CompresorSubsystem;
@@ -44,7 +45,7 @@ public class RobotContainer {
     configureAuto();
 if(controles_angel){
   driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
-  () -> -XboxController_main.getRawAxis(1), // Velocidad
+  () -> -XboxController_main.getRawAxis(3), // Velocidad
   () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // giro
   () -> XboxController_main.getRawButton(2), // boton autoapuntado
   () -> XboxController_main.getRawButton(3), // boton balanceo
@@ -53,10 +54,10 @@ if(controles_angel){
 }else{
   driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
   () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // Velocidad
-  () -> -XboxController_main.getRawAxis(0), // giro
+  () -> XboxController_main.getRawAxis(0), // giro
   () -> XboxController_main.getRawButton(2), // boton autoapuntado limelight
   () -> XboxController_main.getRawButton(3), // boton balanceo
-  () -> XboxController_main.getRawButton(1))); // boton apuntado substation
+  () -> XboxController_main.getRawButton(1))); // boton apuntado substation0
 }
 
 
@@ -85,10 +86,7 @@ if(controles_angel){
 
   public void configureAuto() {
 
-    autoChooser.setDefaultOption("Null autonomous", null);
-    autoChooser.addOption("Mobility", new mobility());
-    autoChooser.addOption("ONE_GP_balanceo", new ONE_GP_balanceo());
-    autoChooser.addOption("One_GP_mobility", new ONE_GP_mobility());
+    autoChooser.setDefaultOption("Mobility", new mobility());
     SmartDashboard.putData("Autonomous", autoChooser);
   }
 

@@ -3,6 +3,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.posicionesbrazo.posicioncentrodemasaabajoydentroframe;
@@ -15,6 +16,8 @@ public class BrazoCmd extends CommandBase {
   private final BrazoSubsystem brazosubsystem;
   private Supplier<Double> velocidadInferior, velocidadSuperior;
   private Supplier<Boolean> BotonArriba, BotonDerecha, BotonAbajo, BotonIzquierda, BotonDesbloqueo;
+  boolean condicion;
+  int valBotIzq = 0;
 
   public BrazoCmd(BrazoSubsystem brazosubsystem, Supplier<Double> velocidadInferior, Supplier<Double> velocidadSuperior,
       Supplier<Boolean> BotonDesbloqueo, Supplier<Boolean> BotonArriba, Supplier<Boolean> BotonDerecha,
@@ -44,6 +47,7 @@ public class BrazoCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("Valor de Entrada", valBotIzq);
 
     if (BotonAbajo.get()) {
 
@@ -61,8 +65,10 @@ public class BrazoCmd extends CommandBase {
 
     } else if (BotonIzquierda.get()) {
 
-      brazosubsystem.movimiento_brazo_angulo(posiciondejarcono.ejeinferior, posiciondejarcono.ejesuperior);/// dejar
-                                                                                                           /// cono
+      brazosubsystem.movimiento_brazo_angulo(posiciondejarcono.ejeinferior, posiciondejarcono.ejesuperior);/// dejar                                                                                                     /// cono
+      valBotIzq = 1;
+
+      
 
     } else if (BotonDesbloqueo.get()) {
 
@@ -83,6 +89,19 @@ public class BrazoCmd extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return false;
+    if(DriverStation.isAutonomousEnabled()){
+
+      if(BotonIzquierda.get()){
+        if(brazosubsystem.gradosEjeInferior() == 20 && brazosubsystem.gradosEjeSuperior()==-130){
+          return true;
+        }else{
+          return false;
+        }
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+    }
   }
-}

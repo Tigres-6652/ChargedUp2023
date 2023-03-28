@@ -15,6 +15,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.BrazoCmd;
 import frc.robot.commands.GarraCmd;
 import frc.robot.commands.Auto.DrivetrainRamseteCommand;
+import frc.robot.subsystems.GarraSubsystem;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -31,13 +32,16 @@ public class ONE_GP_mobility extends SequentialCommandGroup {
 
     addCommands(
 
-        new ParallelDeadlineGroup(new BrazoCmd(RobotContainer.brazosubsystem, () -> 0.0, () -> 0.0, () -> false, () -> false,
-            () -> false, () -> false, () -> true), new WaitCommand(4)),
-        new ParallelDeadlineGroup(new GarraCmd(RobotContainer.garraSusbsytem, () -> true, () -> false), new WaitCommand(3)),
+    /*      new ParallelDeadlineGroup(new BrazoCmd(RobotContainer.brazosubsystem, () -> 0.0, () -> 0.0, () -> false, () -> false,
+            () -> false, () -> false, () -> true),new GarraCmd(RobotContainer.garraSusbsytem,()-> true, ()->false), new ,
         new ParallelDeadlineGroup(new BrazoCmd(RobotContainer.brazosubsystem, () -> 0.0, () -> 0.0, () -> false, () -> true,
-            () -> false, () -> false, () -> true)),
+            () -> false, () -> false, () -> false)),
+        new ParallelDeadlineGroup(new GarraCmd(RobotContainer.garraSusbsytem, () -> true, () -> false), new WaitCommand(3)),
+
         new ParallelDeadlineGroup(
             new DrivetrainRamseteCommand(RobotContainer.driveSubsystem, ONE_GP_individual).robotRelative()));
+             */
+    );
   }
 
 }

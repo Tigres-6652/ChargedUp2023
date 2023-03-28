@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.9350128286561847,
-        "y": 4.7457150549108515
+        "x": 2.015061034401669,
+        "y": 4.8829405504745385
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9133801065464793,
-        "y": 4.7457150549108515
+        "x": 2.2895120255290435,
+        "y": 4.8715050925108985
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -24,12 +24,62 @@
     },
     {
       "anchorPoint": {
-        "x": 4.805312777529977,
-        "y": 4.75
+        "x": 2.8841558396383555,
+        "y": 4.848634176583617
       },
       "prevControl": {
-        "x": 3.0555382323674944,
-        "y": 4.75
+        "x": 2.59826939054734,
+        "y": 4.860069634547257
+      },
+      "nextControl": {
+        "x": 2.59826939054734,
+        "y": 4.860069634547257
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.8549646229107004,
+        "y": 4.91724692436546
+      },
+      "prevControl": {
+        "x": 2.1065446981107945,
+        "y": 4.91724692436546
+      },
+      "nextControl": {
+        "x": 2.1065446981107945,
+        "y": 4.91724692436546
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.680727883567037,
+        "y": 4.848634176583617
+      },
+      "prevControl": {
+        "x": 6.269051396875975,
+        "y": 4.860069634547258
       },
       "nextControl": null,
       "holonomicAngle": 0,
