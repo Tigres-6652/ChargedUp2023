@@ -1,5 +1,11 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayDeque;
+import java.util.ResourceBundle.Control;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -11,6 +17,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -57,8 +64,16 @@ public class DriveSubsystem extends SubsystemBase {
   AHRS m_gyro = new AHRS(SPI.Port.kMXP); // navx
   DifferentialDriveOdometry m_odometry;
 
-  //Balanceo
+  ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+
+  
+  // Balanceo
   double velocidadbalanceo;
+
+  //variable posicion sin mover
+  double posicionfijaizq;
+  double posicionfijader;
+  
 
   @Override
   public void periodic() {
@@ -66,96 +81,39 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.update(
         m_gyro.getRotation2d(), getRightEncoderdistance(), getLeftEncoderdistance());
 
-    /*SmartDashboard.putNumber("encizq", getLeftEncoderdistance());
-    SmartDashboard.putNumber("encder", getRightEncoderdistance());
-    SmartDashboard.putNumber("getTurnRate", getTurnRate());
-    SmartDashboard.putNumber("getheading", getHeading());
+    
+      SmartDashboard.putNumber("encizq", getLeftEncoderdistance());
+      SmartDashboard.putNumber("encder", getRightEncoderdistance());
+    /** SmartDashboard.putNumber("getTurnRate", getTurnRate());
+     * SmartDashboard.putNumber("getheading", getHeading());
+     * 
+     * SmartDashboard.putNumber("velocidad", (MCI1ENC.getSelectedSensorVelocity() /
+     * 4096 * Math.PI * 6 * 10 * 2.54 / 100));
+     */
 
-    SmartDashboard.putNumber("velocidad", (MCI1ENC.getSelectedSensorVelocity() / 4096 * Math.PI * 6 * 10 * 2.54 / 100));*/
+   // SmartDashboard.putNumber("Angulo Balanceo", m_gyro.getRoll());
 
-    SmartDashboard.putNumber("Angulo Balanceo", m_gyro.getRoll());
+   SmartDashboard.putNumber("gyro1", gyro.getAngle());
+   SmartDashboard.putNumber("gyro1vel", gyro.getRate());
+
+   //SmartDashboard.putNumber("gyro2", gyro.);
 
   }
 
   public DriveSubsystem() {
-    resetTalons();
     resetEncoders();
+
     m_odometry = new DifferentialDriveOdometry(getRotation2d(),
         getLeftEncoderdistance(), getRightEncoderdistance());
+        
+        
+        configPIDDrivTr();
 
-    motsizq.setInverted(false);
-    motsder.setInverted(true);
-    // configPIDDrivTr();
 
-  }
-
-  public void configPIDDrivTr() {
-
-    MCI1ENC.configOpenloopRamp(0.05);
-    MCD4ENC.configOpenloopRamp(0.05);
-
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    MCI1ENC.configFactoryDefault();
-
-    /* Config neutral deadband to be the smallest possible */
-    MCI1ENC.configNeutralDeadband(0.001);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    MCI1ENC.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
-        Constants.KPIDchasis.kPIDLoopIdx,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the peak and nominal outputs */
-    MCI1ENC.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the Velocity closed loop gains in slot0 */
-    MCI1ENC.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    // MCI1ENC.configOpenloopRamp(2.0);
-
-    // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    MCD4ENC.configFactoryDefault();
-
-    /* Config neutral deadband to be the smallest possible */
-    MCD4ENC.configNeutralDeadband(0.001);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    MCD4ENC.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
-        Constants.KPIDchasis.kPIDLoopIdx,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the peak and nominal outputs */
-    MCD4ENC.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the Velocity closed loop gains in slot0 */
-    MCD4ENC.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#
 
   }
 
-  public void CHASIS(double velocidad, double giro, boolean autoapuntado, boolean balanceo, boolean apuntadoagarrar) {
+  public void CHASIS(double velocidad, double giro, boolean autoapuntado, boolean balanceo, boolean apuntadoagarrar, boolean robotSinmovimiento) {
 
     double calculo_encizq;
     double calculo_encder;
@@ -171,15 +129,13 @@ public class DriveSubsystem extends SubsystemBase {
      */
 
     if (autoapuntado) {
-
+      motsizq.setInverted(false);
+      motsder.setInverted(true);
       double x = tx.getDouble(0.0);
 
-      double girokp=frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.girokp;
-      double GiroError= x;
-      double ajustegiro=girokp*GiroError;
-
-
-
+      double girokp = frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.girokp;
+      double GiroError = x;
+      double ajustegiro = girokp * GiroError;
 
       // distancia
       double y = ty.getDouble(0.0);
@@ -192,7 +148,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         ajustdist = frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias;
 
-      } else if (ajustedistancia < frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias && ajustedistancia > -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias) {
+      } else if (ajustedistancia < frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias
+          && ajustedistancia > -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_distancias) {
 
         ajustdist = ajustedistancia;
 
@@ -206,7 +163,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         ajutGi = frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro;
 
-      } else if (ajustegiro < frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro && ajustegiro > -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro) {
+      } else if (ajustegiro < frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro
+          && ajustegiro > -frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.vel_max_giro) {
 
         ajutGi = ajustegiro;
 
@@ -219,38 +177,81 @@ public class DriveSubsystem extends SubsystemBase {
       chasis.arcadeDrive(ajustdist, -ajutGi);
 
     } else if (balanceo) {
+      motsizq.setInverted(false);
+      motsder.setInverted(true);
+      double angulo_equilibrio = m_gyro.getRoll();
 
-     double angulo_equilibrio= m_gyro.getRoll();
+      double vel = angulo_equilibrio * val_Balanceo.kp;
 
-     double vel=angulo_equilibrio*val_Balanceo.kp;
-
-      if(vel>val_Balanceo.velocidadmaxima){
-        velocidadbalanceo=val_Balanceo.velocidadmaxima;
-      }else{
-        velocidadbalanceo=vel;
+      if (vel > val_Balanceo.velocidadmaxima) {
+        velocidadbalanceo = val_Balanceo.velocidadmaxima;
+      } else {
+        velocidadbalanceo = vel;
 
       }
-      if(vel<-val_Balanceo.velocidadmaxima){
-        velocidadbalanceo=-val_Balanceo.velocidadmaxima;
-      }else{
-velocidadbalanceo=vel;
+      if (vel < -val_Balanceo.velocidadmaxima) {
+        velocidadbalanceo = -val_Balanceo.velocidadmaxima;
+      } else {
+        velocidadbalanceo = vel;
       }
 
-chasis.arcadeDrive(velocidadbalanceo, 0);
+      chasis.arcadeDrive(velocidadbalanceo, 0);
+    } else if(robotSinmovimiento){
+
+
+MCI1ENC.set(ControlMode.Position, posicionfijaizq);
+MCD4ENC.set(ControlMode.Position, posicionfijader);
+
+
+
+MCI2.follow(MCI1ENC);
+MCI3.follow(MCI1ENC);
+
+MCD5.follow(MCD4ENC);
+MCD6.follow(MCD4ENC);
+
+
+
+
     } else {
 
       if (apuntadoagarrar) {
 
         cambiovel1 = 0.75;
         cambiovel2 = 0.75;
+
       } else {
         cambiovel1 = 1;
         cambiovel2 = 1;
       }
 
-      chasis.arcadeDrive(velocidad * cambiovel1, -giro * cambiovel2);
+
+      
+      chasis.arcadeDrive(velocidad, giro);
+
+  
+      
+
+MCI2.follow(MCI1ENC);
+MCI3.follow(MCI1ENC);
+
+MCD5.follow(MCD4ENC);
+MCD6.follow(MCD4ENC);
+
+      posicionfijaizq=MCI1ENC.getSelectedSensorPosition();
+      posicionfijader=MCD4ENC.getSelectedSensorPosition();
+
+
 
     }
+
+    SmartDashboard.putNumber("GUARDAposicionIzq", posicionfijaizq);
+    SmartDashboard.putNumber("GUARDAposicionDer", posicionfijader);
+
+    SmartDashboard.putNumber("posicionIzq", MCI1ENC.getSelectedSensorPosition());
+    SmartDashboard.putNumber("posicionDer", MCD4ENC.getSelectedSensorPosition());
+
+
 
   }
 
@@ -271,16 +272,14 @@ chasis.arcadeDrive(velocidadbalanceo, 0);
 
   }
 
-  public void resetTalons() {
+  public void resetSensors() {
 
-    MCI1ENC.configFactoryDefault();
-    MCI2.configFactoryDefault();
-    MCI3.configFactoryDefault();
+    MCI1ENC.setSelectedSensorPosition(0);
+    MCD4ENC.setSelectedSensorPosition(0);
 
-    MCD4ENC.configFactoryDefault();
-    MCD5.configFactoryDefault();
-    MCD6.configFactoryDefault();
+
     m_gyro.calibrate();
+    gyro.calibrate();
 
   }
 
@@ -334,6 +333,207 @@ chasis.arcadeDrive(velocidadbalanceo, 0);
   public Rotation2d getRotation2d() {
 
     return m_gyro.getRotation2d();
+  }
+
+  public void configPIDDrivTr() {
+
+    /* Factory Default all hardware to prevent unexpected behaviour */
+    MCI1ENC.configFactoryDefault();
+
+    /* Config neutral deadband to be the smallest possible */
+    MCI1ENC.configNeutralDeadband(0.001);
+
+    /* Config sensor used for Primary PID [Velocity] */
+    MCI1ENC.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
+        Constants.KPIDchasis.kPIDLoopIdx,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the peak and nominal outputs */
+    MCI1ENC.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
+    MCI1ENC.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
+    MCI1ENC.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
+    MCI1ENC.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the Velocity closed loop gains in slot0 */
+    MCI1ENC.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI1ENC.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI1ENC.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI1ENC.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Factory Default all hardware to prevent unexpected behaviour */
+    MCI2.configFactoryDefault();
+
+    /* Config neutral deadband to be the smallest possible */
+    MCI2.configNeutralDeadband(0.001);
+
+    /* Config sensor used for Primary PID [Velocity] */
+    MCI2.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
+        Constants.KPIDchasis.kPIDLoopIdx,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the peak and nominal outputs */
+    MCI2.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
+    MCI2.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
+    MCI2.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
+    MCI2.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the Velocity closed loop gains in slot0 */
+    MCI2.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI2.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI2.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI2.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Factory Default all hardware to prevent unexpected behaviour */
+    MCI3.configFactoryDefault();
+
+    /* Config neutral deadband to be the smallest possible */
+    MCI3.configNeutralDeadband(0.001);
+
+    /* Config sensor used for Primary PID [Velocity] */
+    MCI3.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
+        Constants.KPIDchasis.kPIDLoopIdx,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the peak and nominal outputs */
+    MCI3.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
+    MCI3.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
+    MCI3.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
+    MCI3.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the Velocity closed loop gains in slot0 */
+    MCI3.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI3.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI3.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCI3.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    // MCI1ENC.configOpenloopRamp(2.0);
+
+    // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#
+    /* Factory Default all hardware to prevent unexpected behaviour */
+    MCD4ENC.configFactoryDefault();
+
+    /* Config neutral deadband to be the smallest possible */
+    MCD4ENC.configNeutralDeadband(0.001);
+
+    /* Config sensor used for Primary PID [Velocity] */
+    MCD4ENC.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
+        Constants.KPIDchasis.kPIDLoopIdx,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the peak and nominal outputs */
+    MCD4ENC.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
+    MCD4ENC.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
+    MCD4ENC.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
+    MCD4ENC.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the Velocity closed loop gains in slot0 */
+    MCD4ENC.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD4ENC.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD4ENC.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD4ENC.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Factory Default all hardware to prevent unexpected behaviour */
+    MCD5.configFactoryDefault();
+
+    /* Config neutral deadband to be the smallest possible */
+    MCD5.configNeutralDeadband(0.001);
+
+    /* Config sensor used for Primary PID [Velocity] */
+    MCD5.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
+        Constants.KPIDchasis.kPIDLoopIdx,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the peak and nominal outputs */
+    MCD5.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
+    MCD5.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
+    MCD5.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
+    MCD5.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the Velocity closed loop gains in slot0 */
+    MCD5.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD5.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD5.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD5.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    /* Factory Default all hardware to prevent unexpected behaviour */
+    MCD6.configFactoryDefault();
+
+    /* Config neutral deadband to be the smallest possible */
+    MCD6.configNeutralDeadband(0.001);
+
+    /* Config sensor used for Primary PID [Velocity] */
+    MCD6.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
+        Constants.KPIDchasis.kPIDLoopIdx,
+        Constants.KPIDchasis.kTimeoutMs);
+        
+
+    /* Config the peak and nominal outputs */
+    MCD6.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
+    MCD6.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
+    MCD6.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
+    MCD6.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
+
+    /* Config the Velocity closed loop gains in slot0 */
+    MCD6.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD6.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD6.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
+        Constants.KPIDchasis.kTimeoutMs);
+    MCD6.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
+        Constants.KPIDchasis.kTimeoutMs);
+
+    // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#
+
+
+    MCI1ENC.setInverted(false);
+    MCI1ENC.setSensorPhase(false);
+
+    MCI2.setInverted(false);
+    MCI2.setSensorPhase(false);
+
+    MCI3.setInverted(false);
+    MCI3.setSensorPhase(false);
+
+    MCD4ENC.setInverted(true);
+    MCD4ENC.setSensorPhase(true);
+
+    MCD5.setInverted(true);
+    MCD5.setSensorPhase(true);
+
+    MCD6.setInverted(true);
+    MCD6.setSensorPhase(true);
+
+
+
+    MCI2.follow(MCI1ENC);
+    MCI3.follow(MCI1ENC);
+
+    MCD5.follow(MCD4ENC);
+    MCD6.follow(MCD4ENC);
+
+    
+
   }
 
 }

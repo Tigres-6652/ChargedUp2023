@@ -44,19 +44,22 @@ public class RobotContainer {
     configureAuto();
 if(controles_angel){
   driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
-  () -> -XboxController_main.getRawAxis(1), // Velocidad
+  () -> XboxController_main.getRawAxis(0), // Velocidad
   () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // giro
   () -> XboxController_main.getRawButton(2), // boton autoapuntado
   () -> XboxController_main.getRawButton(3), // boton balanceo
-  () -> XboxController_main.getRawButton(1))); // boton autoapuntado
-
+  () -> XboxController_main.getRawButton(1),// boton apuntado substation
+  () -> XboxController_main.getRawButton(4)//boton robot tieso
+  )); 
 }else{
   driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
   () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // Velocidad
-  () -> -XboxController_main.getRawAxis(0), // giro
+  () -> XboxController_main.getRawAxis(0), // giro
   () -> XboxController_main.getRawButton(2), // boton autoapuntado limelight
   () -> XboxController_main.getRawButton(3), // boton balanceo
-  () -> XboxController_main.getRawButton(1))); // boton apuntado substation
+  () -> XboxController_main.getRawButton(1),// boton apuntado substation
+  () -> XboxController_main.getRawButton(4)//boton robot tieso
+  )); 
 }
 
 
@@ -86,9 +89,9 @@ if(controles_angel){
   public void configureAuto() {
 
     autoChooser.setDefaultOption("Null autonomous", null);
-    autoChooser.addOption("Mobility", new mobility());
-    autoChooser.addOption("ONE_GP_balanceo", new ONE_GP_balanceo());
-    autoChooser.addOption("One_GP_mobility", new ONE_GP_mobility());
+    //autoChooser.addOption("Mobility", new mobility());
+    //autoChooser.addOption("ONE_GP_balanceo", new ONE_GP_balanceo());
+    //autoChooser.addOption("One_GP_mobility", new ONE_GP_mobility());
     SmartDashboard.putData("Autonomous", autoChooser);
   }
 

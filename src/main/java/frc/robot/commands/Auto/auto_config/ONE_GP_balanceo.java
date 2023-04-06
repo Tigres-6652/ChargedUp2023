@@ -35,8 +35,8 @@ private static final Trajectory chargestation = PathPlanner.loadPath("ONE_GP_bal
     new ParallelDeadlineGroup(new BrazoCmd(RobotContainer.brazosubsystem, ()->0.0, ()->0.0, ()->false, ()->false, ()->false, ()->false, ()->true), new WaitCommand(4)),
     new ParallelDeadlineGroup(new GarraCmd(RobotContainer.garraSusbsytem, ()->true, ()->false), new WaitCommand(1)),
     new ParallelDeadlineGroup(new BrazoCmd(RobotContainer.brazosubsystem, ()->0.0, ()->0.0, ()->false, ()->true, ()->false, ()->false, ()->true)),
-    new ParallelDeadlineGroup(new DrivetrainRamseteCommand(RobotContainer.driveSubsystem, chargestation) .robotRelative()),
-    new ParallelDeadlineGroup(new DriveTrainCmd(driveSubsystem, ()->0.0, ()->0.0, ()->false, ()->true, ()->false))
+    new ParallelDeadlineGroup(new DrivetrainRamseteCommand(RobotContainer.driveSubsystem, chargestation) .robotRelative())
+   // ,new ParallelDeadlineGroup(new DriveTrainCmd(driveSubsystem, ()->0.0, ()->0.0, ()->false, ()->true, ()->false))
 
     );
   }

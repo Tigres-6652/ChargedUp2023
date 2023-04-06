@@ -11,26 +11,26 @@ public class Constants {
 
         public static final class posiciondoublesubstation { //teleop
 
-            public static double ejesuperior = -112;
+            public static double ejesuperior = 112;
             public static double ejeinferior = 0;
 
         }
 
         public static final class posicioncentrodemasaabajoydentroframe { //teleop
 
-            public static double ejesuperior = -35;
+            public static double ejesuperior = 35;
             public static double ejeinferior = 0;
 
         }
 
         public static final class posiciondejarcono {
-            public static double ejesuperior = -130;
+            public static double ejesuperior = 130;
             public static double ejeinferior = 20;
         }
 
         public static final class topesvelocidad {
-            public static double Superior = 0.5;
-            public static double Inferior = 0.3;
+            public static double Superior = 0.7;
+            public static double Inferior = 0.5;
 
         }
     }
@@ -90,7 +90,7 @@ public class Constants {
 
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
-        public final static GainsDT kGains_Velocit = new GainsDT(2.0033, 0.000, 0.005, 1023.0 / 20660.0, 300,
+        public final static GainsDT kGains_Velocit = new GainsDT(0.80316, 0.000, 0.005,0, 300,
                 1.00);
     }
 
@@ -99,12 +99,12 @@ public class Constants {
         public static final int kSlotIdx = 0;
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
-        public final static double KP = 0.003;
+        public final static double KP = 0.04;
         public final static double kI = 0;
-        public final static double kD = 0.005;
-        public final static double kF = 1023.0 / 20660.0;
+        public final static double kD = 0.01;
+        public final static double kF = 0;
         public final static int kIzone = 300;
-        public final static double kPeakOutput = 1.00;
+        public final static double kPeakOutput = 1.0;
     }
 
     // NO MOVERLE A ESTOS VALORES
@@ -112,12 +112,12 @@ public class Constants {
         public static final int kSlotIdx = 0;
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
-        public final static double KP = 0.003;
+        public final static double KP = 3.4;
         public final static double kI = 0;
-        public final static double kD = 0.005;
-        public final static double kF = 1023.0 / 20660.0;
+        public final static double kD = 0.01;
+        public final static double kF = 0;
         public final static int kIzone = 300;
-        public final static double kPeakOutput = 1.00;
+        public final static double kPeakOutput = 1.0;
     }
 
 }
