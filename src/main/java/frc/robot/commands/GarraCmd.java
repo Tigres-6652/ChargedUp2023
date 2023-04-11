@@ -9,12 +9,13 @@ import frc.robot.subsystems.GarraSubsystem;
 public class GarraCmd extends CommandBase {
 
   public final GarraSubsystem garraSubsystem;
-  private Supplier<Boolean> abre, cierra;
+  private Supplier<Boolean> lanzarcubo, lanzarcono, agarrargp;
 
-  public GarraCmd(GarraSubsystem garraSubsystem, Supplier <Boolean> abre,Supplier <Boolean> cierra) {
+  public GarraCmd(GarraSubsystem garraSubsystem, Supplier <Boolean> lanzarcubo,Supplier <Boolean> agarrargp, Supplier<Boolean> lanzarcono) {
 
-this.abre=abre;
-this.cierra=cierra;
+this.lanzarcubo=lanzarcubo;
+this.agarrargp=agarrargp;
+this.lanzarcono=lanzarcono;
 this.garraSubsystem=garraSubsystem;
 addRequirements(garraSubsystem);
 
@@ -30,14 +31,14 @@ addRequirements(garraSubsystem);
 
 
 
-garraSubsystem.pistongarrastate(abre.get(),cierra.get());
-
+garraSubsystem.stategarra(lanzarcubo.get(), lanzarcono.get(), agarrargp.get());
   }
 
 
   @Override
   public void end(boolean interrupted) {
 
+    garraSubsystem.stategarra(false, false, false);
 
 
 

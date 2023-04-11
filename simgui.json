@@ -1,5 +1,10 @@
 {
   "HALProvider": {
+    "DIO": {
+      "window": {
+        "visible": true
+      }
+    },
     "Other Devices": {
       "Compressor[0]": {
         "header": {
@@ -63,6 +68,16 @@
         "window": {
           "visible": true
         }
+      }
+    }
+  },
+  "NetworkTables": {
+    "retained": {
+      "SmartDashboard": {
+        "Autonomous": {
+          "open": true
+        },
+        "open": true
       }
     }
   }

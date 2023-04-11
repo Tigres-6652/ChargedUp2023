@@ -1,11 +1,6 @@
 package frc.robot.subsystems;
 
-import java.util.ArrayDeque;
-import java.util.ResourceBundle.Control;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -17,7 +12,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -27,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.AjustesMovimientoChasis;
 import frc.robot.Constants.PUERTOSCAN;
-import frc.robot.Constants.AjustesMovimientoChasis.autoapuntado;
 import frc.robot.Constants.AjustesMovimientoChasis.val_Balanceo;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -64,62 +58,65 @@ public class DriveSubsystem extends SubsystemBase {
   AHRS m_gyro = new AHRS(SPI.Port.kMXP); // navx
   DifferentialDriveOdometry m_odometry;
 
-  ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+  public static ADIS16470_IMU gyro = new ADIS16470_IMU();
+  // ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
-  
   // Balanceo
   double velocidadbalanceo;
 
-  //variable posicion sin mover
+  // variable posicion sin mover
   double posicionfijaizq;
   double posicionfijader;
-  
 
   @Override
   public void periodic() {
 
     m_odometry.update(
-        m_gyro.getRotation2d(), getRightEncoderdistance(), getLeftEncoderdistance());
+        getRotation2d()/* m_gyro.getRotation2d() */, getRightEncoderdistance(), getLeftEncoderdistance());
 
-    
-      SmartDashboard.putNumber("encizq", getLeftEncoderdistance());
-      SmartDashboard.putNumber("encder", getRightEncoderdistance());
-    /** SmartDashboard.putNumber("getTurnRate", getTurnRate());
+    SmartDashboard.putNumber("encizq", getLeftEncoderdistance());
+    SmartDashboard.putNumber("encder", getRightEncoderdistance());
+    /**
+     * SmartDashboard.putNumber("getTurnRate", getTurnRate());
      * SmartDashboard.putNumber("getheading", getHeading());
      * 
      * SmartDashboard.putNumber("velocidad", (MCI1ENC.getSelectedSensorVelocity() /
      * 4096 * Math.PI * 6 * 10 * 2.54 / 100));
      */
 
-   // SmartDashboard.putNumber("Angulo Balanceo", m_gyro.getRoll());
+    // SmartDashboard.putNumber("Angulo Balanceo", m_gyro.getRoll());
 
-   SmartDashboard.putNumber("gyro1", gyro.getAngle());
-   SmartDashboard.putNumber("gyro1vel", gyro.getRate());
+    /*
+     * SmartDashboard.putNumber("gyro1", gyro.getAngle());
+     * SmartDashboard.putNumber("gyro1vel", gyro.getRate());
+     */
 
-   //SmartDashboard.putNumber("gyro2", gyro.);
+    // SmartDashboard.putNumber("gyro2", gyro.);
 
   }
 
   public DriveSubsystem() {
-    resetEncoders();
+    // resetEncoders();
 
     m_odometry = new DifferentialDriveOdometry(getRotation2d(),
         getLeftEncoderdistance(), getRightEncoderdistance());
-        
-        
-        configPIDDrivTr();
 
-
+    configPIDDrivTr();
 
   }
 
-  public void CHASIS(double velocidad, double giro, boolean autoapuntado, boolean balanceo, boolean apuntadoagarrar, boolean robotSinmovimiento) {
+  public void CHASIS(double velocidad, double giro, boolean autoapuntado, boolean balanceo, boolean apuntadoagarrar,
+      boolean robotSinmovimiento) {
 
-    double calculo_encizq;
-    double calculo_encder;
-
-    calculo_encizq = (-MCI1ENC.getSelectedSensorPosition() / 4096 * Math.PI * 6 * 2.54);
-    calculo_encder = (-MCD4ENC.getSelectedSensorPosition() / 4096 * Math.PI * 6 * 2.54);
+    /*
+     * double calculo_encizq;
+     * double calculo_encder;
+     * 
+     * calculo_encizq = (-MCI1ENC.getSelectedSensorPosition() / 4096 * Math.PI * 6 *
+     * 2.54);
+     * calculo_encder = (-MCD4ENC.getSelectedSensorPosition() / 4096 * Math.PI * 6 *
+     * 2.54);
+     */
 
     /*
      * SmartDashboard.putNumber("encoderizquierdo", calculo_encizq);
@@ -129,8 +126,7 @@ public class DriveSubsystem extends SubsystemBase {
      */
 
     if (autoapuntado) {
-      motsizq.setInverted(false);
-      motsder.setInverted(true);
+
       double x = tx.getDouble(0.0);
 
       double girokp = frc.robot.Constants.AjustesMovimientoChasis.autoapuntado.girokp;
@@ -177,9 +173,7 @@ public class DriveSubsystem extends SubsystemBase {
       chasis.arcadeDrive(ajustdist, -ajutGi);
 
     } else if (balanceo) {
-      motsizq.setInverted(false);
-      motsder.setInverted(true);
-      double angulo_equilibrio = m_gyro.getRoll();
+      double angulo_equilibrio = gyro.getXComplementaryAngle();
 
       double vel = angulo_equilibrio * val_Balanceo.kp;
 
@@ -195,23 +189,25 @@ public class DriveSubsystem extends SubsystemBase {
         velocidadbalanceo = vel;
       }
 
-      chasis.arcadeDrive(velocidadbalanceo, 0);
-    } else if(robotSinmovimiento){
+      MCI1ENC.set(ControlMode.Velocity, velocidadbalanceo);
+      MCD4ENC.set(ControlMode.Velocity, velocidadbalanceo);
 
+      MCI2.follow(MCI1ENC);
+      MCI3.follow(MCI1ENC);
 
-MCI1ENC.set(ControlMode.Position, posicionfijaizq);
-MCD4ENC.set(ControlMode.Position, posicionfijader);
+      MCD5.follow(MCD4ENC);
+      MCD6.follow(MCD4ENC);
 
+    } else if (robotSinmovimiento) {
 
+      MCI1ENC.set(ControlMode.Position, posicionfijaizq);
+      MCD4ENC.set(ControlMode.Position, posicionfijader);
 
-MCI2.follow(MCI1ENC);
-MCI3.follow(MCI1ENC);
+      MCI2.follow(MCI1ENC);
+      MCI3.follow(MCI1ENC);
 
-MCD5.follow(MCD4ENC);
-MCD6.follow(MCD4ENC);
-
-
-
+      MCD5.follow(MCD4ENC);
+      MCD6.follow(MCD4ENC);
 
     } else {
 
@@ -225,34 +221,48 @@ MCD6.follow(MCD4ENC);
         cambiovel2 = 1;
       }
 
-
-      
       chasis.arcadeDrive(velocidad, giro);
 
-  
-      
+      MCI2.follow(MCI1ENC);
+      MCI3.follow(MCI1ENC);
 
-MCI2.follow(MCI1ENC);
-MCI3.follow(MCI1ENC);
+      MCD5.follow(MCD4ENC);
+      MCD6.follow(MCD4ENC);
 
-MCD5.follow(MCD4ENC);
-MCD6.follow(MCD4ENC);
-
-      posicionfijaizq=MCI1ENC.getSelectedSensorPosition();
-      posicionfijader=MCD4ENC.getSelectedSensorPosition();
-
-
+      posicionfijaizq = MCI1ENC.getSelectedSensorPosition();
+      posicionfijader = MCD4ENC.getSelectedSensorPosition();
 
     }
 
-    SmartDashboard.putNumber("GUARDAposicionIzq", posicionfijaizq);
-    SmartDashboard.putNumber("GUARDAposicionDer", posicionfijader);
+    SmartDashboard.putNumber("gyro1", gyro.getAngle());
+    SmartDashboard.putNumber("gyro2", gyro.getXComplementaryAngle());
+    SmartDashboard.putNumber("gyro3", gyro.getYComplementaryAngle());
 
     SmartDashboard.putNumber("posicionIzq", MCI1ENC.getSelectedSensorPosition());
     SmartDashboard.putNumber("posicionDer", MCD4ENC.getSelectedSensorPosition());
 
+  }
+
+  public void set_distance(double distancia) {
 
 
+    MCI1ENC.set(ControlMode.Position, distancia);
+    MCD4ENC.set(ControlMode.Position, distancia);
+
+    MCI2.follow(MCI1ENC);
+    MCI3.follow(MCI1ENC);
+
+    MCD5.follow(MCD4ENC);
+    MCD6.follow(MCD4ENC);
+
+
+  }
+
+  public double DistanceToPulses(double distanceMTS) {
+
+    double pulse = (((((distanceMTS * 100) / 2.54) / 6) / Math.PI) * 4096);
+
+    return pulse;
   }
 
   public Pose2d getPose() {
@@ -277,18 +287,16 @@ MCD6.follow(MCD4ENC);
     MCI1ENC.setSelectedSensorPosition(0);
     MCD4ENC.setSelectedSensorPosition(0);
 
+    // m_gyro.reset();
 
-    m_gyro.calibrate();
-    gyro.calibrate();
+    gyro.reset();
 
   }
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    // m_odometry.resetPosition(pose, m_gyro.getRotation2d());
-
-    zeroHeading();
     m_odometry.resetPosition(getRotation2d(), getLeftEncoderdistance(), getRightEncoderdistance(), pose);
+
   }
 
   public void arcadeDrive(double fwd, double rot) {
@@ -299,7 +307,7 @@ MCD6.follow(MCD4ENC);
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     motsizq.setVoltage(leftVolts);
     motsder.setVoltage(rightVolts);
-    chasis.feed();
+    // chasis.feed();
   }
 
   public double getAverageEncoderDistance() {
@@ -319,20 +327,28 @@ MCD6.follow(MCD4ENC);
   }
 
   public void zeroHeading() {
-    m_gyro.reset();
+
+    gyro.reset();
+    // m_gyro.reset();
   }
 
   public double getHeading() {
-    return -m_gyro.getRotation2d().getDegrees();
+
+    return gyro.getAngle();
+    // return -m_gyro.getRotation2d().getDegrees();
   }
 
   public double getTurnRate() {
-    return m_gyro.getRate();
+
+    return gyro.getRate();
+    // return m_gyro.getRate();
   }
 
   public Rotation2d getRotation2d() {
 
-    return m_gyro.getRotation2d();
+    // return m_gyro.getRotation2d();
+
+    return Rotation2d.fromDegrees(gyro.getRate());
   }
 
   public void configPIDDrivTr() {
@@ -485,7 +501,6 @@ MCD6.follow(MCD4ENC);
     MCD6.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
         Constants.KPIDchasis.kPIDLoopIdx,
         Constants.KPIDchasis.kTimeoutMs);
-        
 
     /* Config the peak and nominal outputs */
     MCD6.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
@@ -505,7 +520,6 @@ MCD6.follow(MCD4ENC);
 
     // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#
 
-
     MCI1ENC.setInverted(false);
     MCI1ENC.setSensorPhase(false);
 
@@ -524,15 +538,11 @@ MCD6.follow(MCD4ENC);
     MCD6.setInverted(true);
     MCD6.setSensorPhase(true);
 
-
-
     MCI2.follow(MCI1ENC);
     MCI3.follow(MCI1ENC);
 
     MCD5.follow(MCD4ENC);
     MCD6.follow(MCD4ENC);
-
-    
 
   }
 

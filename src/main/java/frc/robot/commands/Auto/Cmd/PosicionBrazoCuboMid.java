@@ -2,25 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
-
-import java.util.function.Supplier;
+package frc.robot.commands.Auto.Cmd;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.CompuertaSubsystem;
+import frc.robot.RobotContainer;
 
-public class CompuertaCmd extends CommandBase {
+public class PosicionBrazoCuboMid extends CommandBase {
+  /** Creates a new DejarCubo. */
 
-public final CompuertaSubsystem compuertasubsystem;
-  private Supplier<Boolean> state;
-
-  public CompuertaCmd(CompuertaSubsystem compuertasubsystem,Supplier<Boolean> state) {
-
-    this.state=state;
-    this.compuertasubsystem=compuertasubsystem;
-
-    addRequirements(compuertasubsystem);
-
+  
+  public PosicionBrazoCuboMid() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -31,13 +23,17 @@ public final CompuertaSubsystem compuertasubsystem;
   @Override
   public void execute() {
 
-compuertasubsystem.compuertastatus(state.get());
-
+    RobotContainer.brazosubsystem.ejeinferior(0.3);
+    RobotContainer.brazosubsystem.ejesuperior(0.3);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+
+  }
 
   // Returns true when the command should end.
   @Override

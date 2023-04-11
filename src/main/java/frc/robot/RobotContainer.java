@@ -6,17 +6,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.BrazoCmd;
-import frc.robot.commands.CompresorCmd;
-import frc.robot.commands.CompuertaCmd;
 import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.GarraCmd;
-import frc.robot.commands.Auto.auto_config.ONE_GP_balanceo;
-import frc.robot.commands.Auto.auto_config.ONE_GP_mobility;
+import frc.robot.commands.Auto.auto_config.Cono_engaged;
+import frc.robot.commands.Auto.auto_config.Cubo_engaged;
 import frc.robot.commands.Auto.auto_config.mobility;
 import frc.robot.subsystems.BrazoSubsystem;
-import frc.robot.subsystems.CompresorSubsystem;
-import frc.robot.subsystems.CompuertaSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GarraSubsystem;
 
@@ -25,15 +22,13 @@ public class RobotContainer {
   public final static DriveSubsystem driveSubsystem = new DriveSubsystem();
   public final static GarraSubsystem garraSusbsytem = new GarraSubsystem();
   public final static BrazoSubsystem brazosubsystem = new BrazoSubsystem();
-  public final static CompuertaSubsystem compuertasubsystem = new CompuertaSubsystem();
-  public final static CompresorSubsystem compresorSubsystem = new CompresorSubsystem();
+
 
   public Joystick XboxController_main = new Joystick(0);
   public Joystick XboxController_secondary = new Joystick(1);
 
   private static SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-  boolean controles_angel=false;    //Cambiar variable si maneja Angel
 
   public RobotContainer() {
     Controles();
@@ -42,56 +37,58 @@ public class RobotContainer {
   private void Controles() {
 
     configureAuto();
-if(controles_angel){
-  driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
-  () -> XboxController_main.getRawAxis(0), // Velocidad
-  () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // giro
-  () -> XboxController_main.getRawButton(2), // boton autoapuntado
-  () -> XboxController_main.getRawButton(3), // boton balanceo
-  () -> XboxController_main.getRawButton(1),// boton apuntado substation
-  () -> XboxController_main.getRawButton(4)//boton robot tieso
-  )); 
-}else{
+
   driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
   () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // Velocidad
-  () -> XboxController_main.getRawAxis(0), // giro
+  () -> -XboxController_main.getRawAxis(0), // giro
   () -> XboxController_main.getRawButton(2), // boton autoapuntado limelight
   () -> XboxController_main.getRawButton(3), // boton balanceo
   () -> XboxController_main.getRawButton(1),// boton apuntado substation
   () -> XboxController_main.getRawButton(4)//boton robot tieso
-  )); 
-}
+
+  ));
+
+  //new JoystickButton(XboxController_main,5).toggleOnTrue(new GarraCmd(garraSusbsytem, ()->true, ()->false));
+  new POVButton(XboxController_main, 90).toggleOnTrue(new GarraCmd(garraSusbsytem, ()->true, ()->false, ()->false));
+  new POVButton(XboxController_main, 180).toggleOnTrue(new GarraCmd(garraSusbsytem, ()->false, ()->true, ()->false));
+  new POVButton(XboxController_main, 270).toggleOnTrue(new GarraCmd(garraSusbsytem, ()->false, ()->false, ()->true));
 
 
-    garraSusbsytem.setDefaultCommand(new GarraCmd(garraSusbsytem,
-        () -> XboxController_main.getRawButtonPressed(5), //boton abre
-        () -> XboxController_main.getRawButtonPressed(6))); //boton cierra
+  /*
+ * 1  BotonDesbloqueo
+ * 2  ReturnHome
+ * 3  ModoSubstationCono
+ * 4  SafeArm
+ * 5  DejarConoEnmedio
+ * 6  ModoRecogePiso
+ * 7  ModoSubstationCubo
+ * 8  DejarCubomid
+ * 9  DejarCuboarriba
+ * 10 Dejarabajo
+ */
 
-    compresorSubsystem.setDefaultCommand(new CompresorCmd(compresorSubsystem, false)); //No moverle
+  //                                                                                                                                                                                                                1           2         3          4         5          6         7           8          9          10
+new JoystickButton(XboxController_secondary, 1).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1), ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->true));
+new JoystickButton(XboxController_secondary, 2).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1), ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false));
+new JoystickButton(XboxController_secondary, 3).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1), ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false));
+new JoystickButton(XboxController_secondary, 4).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1), ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false));
+new JoystickButton(XboxController_secondary, 5).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1), ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
+new JoystickButton(XboxController_secondary, 6).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1), ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
+    
+     new POVButton(XboxController_secondary, 0).  toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
+     new POVButton(XboxController_secondary, 270).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
+     new POVButton(XboxController_secondary, 90). toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false));
+     new POVButton(XboxController_secondary, 180).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false)); 
 
-    brazosubsystem.setDefaultCommand(new BrazoCmd(brazosubsystem,
-        () -> XboxController_secondary.getRawAxis(5),    //control brazo inferior
-        () -> XboxController_secondary.getRawAxis(1),    //control brazo superior
-        () -> XboxController_secondary.getRawButton(6),//boton desbloqueo_mover joints con joystick
-        () -> XboxController_secondary.getRawButton(4),//return home
-        () -> XboxController_secondary.getRawButton(2),//substation
-        () -> XboxController_secondary.getRawButton(1),//centro de masa_brazo dentro de frame
-        () -> XboxController_secondary.getRawButton(3)//dejar cono
-        ));
-
-    compuertasubsystem
-        .setDefaultCommand(new CompuertaCmd(compuertasubsystem,
-            () -> XboxController_secondary.getRawButton(5)));
-
-    new JoystickButton(XboxController_main, 7).toggleOnTrue(new CompresorCmd(compresorSubsystem, true));
   }
 
   public void configureAuto() {
 
     autoChooser.setDefaultOption("Null autonomous", null);
-    //autoChooser.addOption("Mobility", new mobility());
-    //autoChooser.addOption("ONE_GP_balanceo", new ONE_GP_balanceo());
-    //autoChooser.addOption("One_GP_mobility", new ONE_GP_mobility());
+    autoChooser.addOption("Mobility", new mobility());
+    autoChooser.addOption("Cono en mid y engaged", new Cono_engaged());
+    autoChooser.addOption("Cubo High y engaged", new Cubo_engaged());
+
     SmartDashboard.putData("Autonomous", autoChooser);
   }
 

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KPIDejeinferior;
 import frc.robot.Constants.KPIDejesuperior;
 import frc.robot.Constants.PUERTOSCAN;
-import frc.robot.Constants.posicionesbrazo.topesvelocidad;
 
 public class BrazoSubsystem extends SubsystemBase {
 
@@ -34,11 +33,6 @@ public class BrazoSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("limitinferior", !limitejeinferior.get());
     SmartDashboard.putNumber("grados eje inferior", gradosEjeInferior());
     SmartDashboard.putNumber("grados eje superior", gradosEjeSuperior());
-
-
-
-SmartDashboard.putNumber("pulsos inf", motejeabajo.getSelectedSensorPosition());
-SmartDashboard.putNumber("pulsos sup", motejearriba.getSelectedSensorPosition());
 
 
   }
@@ -84,9 +78,9 @@ SmartDashboard.putNumber("pulsos sup", motejearriba.getSelectedSensorPosition())
     } else if (!limitejesuperior.get() && velsup > 0.001) {
 
       motejearriba.set(0);
-    } else if(gradosEjeSuperior()<-280&&velsup>0.001&&limitejesuperior.get()){
+    } else if(gradosEjeSuperior()<-270&&velsup>0.001&&limitejesuperior.get()){
       motejearriba.set(-velsup);
-    } else if(gradosEjeSuperior()<-280&&velsup<0.001&&limitejesuperior.get()){
+    } else if(gradosEjeSuperior()<-270&&velsup<0.001&&limitejesuperior.get()){
       motejearriba.set(0);
 
     }
@@ -150,7 +144,7 @@ double pulsos=((((((gradosSup/2)/360)*3.285714)*100)*4096));
 
       } else {
 
-        motejeabajo.set(-0.5);
+        motejeabajo.set(-0.7);
 
       }
 
@@ -160,7 +154,7 @@ double pulsos=((((((gradosSup/2)/360)*3.285714)*100)*4096));
 
       } else {
 
-        motejearriba.set(-0.5);
+        motejearriba.set(-0.7);
 
       }
 
@@ -204,8 +198,6 @@ double posicion_superior=gradosEjeSuperiorApulsos(gradosuperior);
 motejearriba.set(ControlMode.Position, posicion_superior);
 motejeabajo.set(ControlMode.Position , posicion_inferior);
 
-SmartDashboard.putNumber("posicion inf", posicion_inferior);
-SmartDashboard.putNumber("posicion sup", posicion_superior);
 }
 
 

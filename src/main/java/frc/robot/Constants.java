@@ -9,45 +9,75 @@ public class Constants {
 
     public static final class posicionesbrazo {
 
-        public static final class posiciondoublesubstation { //teleop
+        public static final class posicionConodoublesubstation { // teleop
 
-            public static double ejesuperior = 112;
+            public static double ejesuperior = 89;
             public static double ejeinferior = 0;
 
         }
 
-        public static final class posicioncentrodemasaabajoydentroframe { //teleop
+        public static final class posicionCuboDoubleSub {
 
-            public static double ejesuperior = 35;
+            public static double ejesuperior = 86;
             public static double ejeinferior = 0;
+
+        }
+
+        public static final class posicioncubopiso {
+            public static double ejesuperior = 158;
+            public static double ejeinferior = 97;
+        }
+
+        public static final class posicionSafeArm { // teleop
+
+            public static double ejesuperior = 270;
+            public static double ejeinferior = 85;
 
         }
 
         public static final class posiciondejarcono {
-            public static double ejesuperior = 130;
-            public static double ejeinferior = 20;
+            public static double ejesuperior = 200;
+            public static double ejeinferior = 84;
         }
 
-        public static final class topesvelocidad {
-            public static double Superior = 0.7;
-            public static double Inferior = 0.5;
-
+        public static final class posiciondejarCubo {
+            public static double ejesuperior = 200;
+            public static double ejeinferior = 84;
         }
+        public static final class posiciondejarCuboArriba {
+            public static double ejesuperior = 109;
+            public static double ejeinferior = 13;
+        }
+
+        public static final class posiciondejarAbajo {
+            public static double ejesuperior = 200;
+            public static double ejeinferior = 84;
+        }
+
+
+
+        /*
+         * public static final class topesvelocidad {
+         * public static double Superior = 0.7;
+         * public static double Inferior = 0.5;
+         * 
+         * }
+         */
     }
 
     public static final class AjustesMovimientoChasis {
 
         public static final class val_Balanceo {
-            public static double velocidadmaxima = 0.5;
-            public static double kp = 0.05;
+            public static double velocidadmaxima = 500;
+            public static double kp = -50;
         }
 
-        public static class autoapuntado { //limelight
+        public static class autoapuntado { // limelight
             public static double girokp = 0.095;
             public static double distanciakp = -0.095;
 
-            public static double vel_max_giro=0.4;
-            public static double vel_max_distancias=0.5;
+            public static double vel_max_giro = 0.4;
+            public static double vel_max_distancias = 0.5;
         }
 
     }
@@ -66,11 +96,19 @@ public class Constants {
 
     // NO MOVERLE AL MENOS SI HICISTE EL TUNEO DE PID CON SYSTEM IDENTIFICATION TOOL
     public static final class DriveConstants {
-        public static final double ksVolts = 1.279;
+        public static final double ksVolts = 1.1922;
+        public static final double kvVoltSecondsPerMeter = 2.8442;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.82181;
+        public static final double kPDriveVel = 1.8645;
+        public static final double kTrackwidthMeters = 0.64;
+
+//With Navx
+/*        public static final double ksVolts = 1.279;
         public static final double kvVoltSecondsPerMeter = 2.7816;
         public static final double kaVoltSecondsSquaredPerMeter = 0.72925;
         public static final double kPDriveVel = 0.80316;
-        public static final double kTrackwidthMeters = 0.64;
+        public static final double kTrackwidthMeters = 0.64; */
+
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
                 kTrackwidthMeters);
         public static Path DEPLOY_DIRECTORY = Filesystem.getDeployDirectory().toPath();
@@ -90,7 +128,7 @@ public class Constants {
 
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
-        public final static GainsDT kGains_Velocit = new GainsDT(0.80316, 0.000, 0.005,0, 300,
+        public final static GainsDT kGains_Velocit = new GainsDT(0.80316, 0.000, 0.005, 0, 300,
                 1.00);
     }
 
@@ -99,7 +137,7 @@ public class Constants {
         public static final int kSlotIdx = 0;
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
-        public final static double KP = 0.04;
+        public final static double KP = 0.1;
         public final static double kI = 0;
         public final static double kD = 0.01;
         public final static double kF = 0;

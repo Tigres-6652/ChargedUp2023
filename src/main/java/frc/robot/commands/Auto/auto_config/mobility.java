@@ -13,7 +13,7 @@ import frc.robot.commands.Auto.DrivetrainRamseteCommand;
 
 public class mobility extends SequentialCommandGroup {
  
-  private static final Trajectory mobility = PathPlanner.loadPath("mobility", Constants.AutoConstants.kMaxSpeedMetersPerSecond , Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+  private static final Trajectory mobility = PathPlanner.loadPath("mobility", Constants.AutoConstants.kMaxSpeedMetersPerSecond , Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared,false);
   
   public mobility() {
     

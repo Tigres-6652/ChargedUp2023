@@ -42,7 +42,7 @@ public class DriveTrainCmd extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-
+driveSubsystem.CHASIS(0, 0, false, false, false, false);
   }
 
   @Override

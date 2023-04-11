@@ -4,19 +4,20 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GarraSubsystem extends SubsystemBase {
 
-  Solenoid pistongarra = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
-  
+  WPI_VictorSPX motor_garra=new WPI_VictorSPX(9);
 
-  
-  boolean conoengarra;
+
+  PowerDistribution pdp=new PowerDistribution(0, ModuleType.kCTRE);
 
   public GarraSubsystem() {
   }
@@ -27,17 +28,31 @@ public class GarraSubsystem extends SubsystemBase {
 
   }
 
-  public void pistongarrastate(boolean abre, boolean cierra) {
+  public void stategarra(boolean lanzarcubo, boolean lanzarcono,boolean agarrar) {
 
-    if (( cierra)) {
-      pistongarra.set(false);
-      conoengarra = false;
+SmartDashboard.putNumber("motor_garra",pdp.getCurrent(4));
+
+    if (( lanzarcubo)) {
+
+      motor_garra.set(-1);
+
+    }else if (lanzarcono) {
+      motor_garra.set(-0.2);
+
+        
+    }else if(agarrar){
+      motor_garra.set(0.4);
+    }else{
+
+      motor_garra.set(0);
+
     }
 
-    if (abre ) {
-      pistongarra.set(true);
-      conoengarra = false;
-    }
+  }
+
+  public  void velocidadmotor(double velocidad){
+
+    motor_garra.set(velocidad);
 
   }
 }
