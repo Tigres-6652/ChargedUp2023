@@ -10,15 +10,17 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.Auto.DrivetrainRamseteCommand;
 
-
 public class mobility extends SequentialCommandGroup {
- 
-  private static final Trajectory mobility = PathPlanner.loadPath("mobility", Constants.AutoConstants.kMaxSpeedMetersPerSecond , Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared,false);
-  
+
+  private static final Trajectory mobility = PathPlanner.loadPath("mobility",
+      Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+      false);
+
   public mobility() {
-    
+
     addCommands(
 
-new ParallelDeadlineGroup(new DrivetrainRamseteCommand(RobotContainer.driveSubsystem, mobility) .robotRelative()) );
+        new ParallelDeadlineGroup(
+            new DrivetrainRamseteCommand(RobotContainer.driveSubsystem, mobility).robotRelative()));
   }
 }

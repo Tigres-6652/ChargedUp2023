@@ -44,6 +44,7 @@ public class Constants {
             public static double ejesuperior = 200;
             public static double ejeinferior = 84;
         }
+
         public static final class posiciondejarCuboArriba {
             public static double ejesuperior = 109;
             public static double ejeinferior = 13;
@@ -53,8 +54,6 @@ public class Constants {
             public static double ejesuperior = 200;
             public static double ejeinferior = 84;
         }
-
-
 
         /*
          * public static final class topesvelocidad {
@@ -102,12 +101,14 @@ public class Constants {
         public static final double kPDriveVel = 1.8645;
         public static final double kTrackwidthMeters = 0.64;
 
-//With Navx
-/*        public static final double ksVolts = 1.279;
-        public static final double kvVoltSecondsPerMeter = 2.7816;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.72925;
-        public static final double kPDriveVel = 0.80316;
-        public static final double kTrackwidthMeters = 0.64; */
+        // With Navx
+        /*
+         * public static final double ksVolts = 1.279;
+         * public static final double kvVoltSecondsPerMeter = 2.7816;
+         * public static final double kaVoltSecondsSquaredPerMeter = 0.72925;
+         * public static final double kPDriveVel = 0.80316;
+         * public static final double kTrackwidthMeters = 0.64;
+         */
 
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
                 kTrackwidthMeters);

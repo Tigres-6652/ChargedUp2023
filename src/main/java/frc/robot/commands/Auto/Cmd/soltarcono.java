@@ -15,13 +15,13 @@ public class soltarcono extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     RobotContainer.garraSusbsytem.velocidadmotor(-0.35);
-
 
   }
 
@@ -30,7 +30,6 @@ public class soltarcono extends CommandBase {
   public void end(boolean interrupted) {
 
     RobotContainer.garraSusbsytem.velocidadmotor(-0);
-
 
   }
 

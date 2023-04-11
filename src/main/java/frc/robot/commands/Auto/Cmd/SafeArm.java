@@ -16,7 +16,8 @@ public class SafeArm extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -29,9 +30,9 @@ public class SafeArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
-RobotContainer.brazosubsystem.ejeinferior(0);
-RobotContainer.brazosubsystem.ejesuperior(0);
+
+    RobotContainer.brazosubsystem.ejeinferior(0);
+    RobotContainer.brazosubsystem.ejesuperior(0);
 
   }
 

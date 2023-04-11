@@ -15,13 +15,14 @@ public class SoltarCubo extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-RobotContainer.garraSusbsytem.velocidadmotor(-1);
+    RobotContainer.garraSusbsytem.velocidadmotor(-1);
 
   }
 
@@ -30,7 +31,6 @@ RobotContainer.garraSusbsytem.velocidadmotor(-1);
   public void end(boolean interrupted) {
 
     RobotContainer.garraSusbsytem.velocidadmotor(0);
-
 
   }
 

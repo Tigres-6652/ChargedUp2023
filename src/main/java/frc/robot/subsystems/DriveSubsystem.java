@@ -245,7 +245,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void set_distance(double distancia) {
 
-
     MCI1ENC.set(ControlMode.Position, distancia);
     MCD4ENC.set(ControlMode.Position, distancia);
 
@@ -254,7 +253,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     MCD5.follow(MCD4ENC);
     MCD6.follow(MCD4ENC);
-
 
   }
 

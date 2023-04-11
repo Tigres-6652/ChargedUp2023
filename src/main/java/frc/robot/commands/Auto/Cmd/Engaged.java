@@ -16,8 +16,8 @@ public class Engaged extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
+  public void initialize() {
+  }
 
   @Override
   public void execute() {
@@ -26,9 +26,8 @@ public class Engaged extends CommandBase {
 
   }
 
-
   @Override
-  public void end(boolean interrupted) {    
+  public void end(boolean interrupted) {
     RobotContainer.driveSubsystem.CHASIS(0, 0, false, false, false, false);
   }
 

@@ -36,7 +36,7 @@ public class BrazoCmd extends CommandBase {
     this.DejarCubomid = DejarCubomid;
     this.DejarCuboarriba = DejarCuboarriba;
     this.Dejarabajo = Dejarabajo;
-    this.ModoSubstationCubo=ModoSubstationCubo;
+    this.ModoSubstationCubo = ModoSubstationCubo;
 
     this.velocidadInferior = velocidadInferior;
     this.velocidadSuperior = velocidadSuperior;

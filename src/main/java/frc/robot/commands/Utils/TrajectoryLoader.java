@@ -18,7 +18,7 @@ public class TrajectoryLoader {
 
     private static final TrajectoryConfig MAX_SPEED_TRAJECTORY = new TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                    .setKinematics(DriveConstants.kDriveKinematics);
+            .setKinematics(DriveConstants.kDriveKinematics);
 
     private static final Trajectory DEFAULT_TRAJECTORY = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d()),

@@ -22,8 +22,6 @@ public class BrazoSubsystem extends SubsystemBase {
 
   public BrazoSubsystem() {
 
-
-
   }
 
   @Override
@@ -34,12 +32,11 @@ public class BrazoSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("grados eje inferior", gradosEjeInferior());
     SmartDashboard.putNumber("grados eje superior", gradosEjeSuperior());
 
-
   }
 
-  public void ejeinferior(double velinf) {  //movimiento con control
+  public void ejeinferior(double velinf) { // movimiento con control
 
-    if (limitejeinferior.get()&&gradosEjeInferior()<85) {
+    if (limitejeinferior.get() && gradosEjeInferior() < 85) {
 
       motejeabajo.set(-velinf);
 
@@ -51,10 +48,10 @@ public class BrazoSubsystem extends SubsystemBase {
 
       motejeabajo.set(0);
 
-    }else if(gradosEjeInferior()>80&&velinf < 0.001){
+    } else if (gradosEjeInferior() > 80 && velinf < 0.001) {
       motejeabajo.set(0);
 
-    } else if(gradosEjeInferior()>80&&velinf > 0.001&&limitejeinferior.get()){
+    } else if (gradosEjeInferior() > 80 && velinf > 0.001 && limitejeinferior.get()) {
       motejeabajo.set(-velinf);
 
     }
@@ -62,12 +59,12 @@ public class BrazoSubsystem extends SubsystemBase {
 
       motejeabajo.setSelectedSensorPosition(0);
 
-    } 
+    }
   }
 
-  public void ejesuperior(double velsup) { //movimiento con control
+  public void ejesuperior(double velsup) { // movimiento con control
 
-    if (limitejesuperior.get()&&gradosEjeSuperior()>-280) {
+    if (limitejesuperior.get() && gradosEjeSuperior() > -280) {
 
       motejearriba.set(-velsup);
 
@@ -78,9 +75,9 @@ public class BrazoSubsystem extends SubsystemBase {
     } else if (!limitejesuperior.get() && velsup > 0.001) {
 
       motejearriba.set(0);
-    } else if(gradosEjeSuperior()<-270&&velsup>0.001&&limitejesuperior.get()){
+    } else if (gradosEjeSuperior() < -270 && velsup > 0.001 && limitejesuperior.get()) {
       motejearriba.set(-velsup);
-    } else if(gradosEjeSuperior()<-270&&velsup<0.001&&limitejesuperior.get()){
+    } else if (gradosEjeSuperior() < -270 && velsup < 0.001 && limitejesuperior.get()) {
       motejearriba.set(0);
 
     }
@@ -118,21 +115,19 @@ public class BrazoSubsystem extends SubsystemBase {
 
   }
 
-  public double gradosEjeSuperiorApulsos(double gradosSup){
+  public double gradosEjeSuperiorApulsos(double gradosSup) {
 
-double pulsos=((((((gradosSup/2)/360)*3.285714)*100)*4096));
+    double pulsos = ((((((gradosSup / 2) / 360) * 3.285714) * 100) * 4096));
 
     return pulsos;
   }
 
-  public double gradosEjeInferiorApulsos(double gradosInf){
+  public double gradosEjeInferiorApulsos(double gradosInf) {
 
-    double pulsos=(((((gradosInf)/360)*4.5714)*4096));
-    
-        return pulsos;
-      }
+    double pulsos = (((((gradosInf) / 360) * 4.5714) * 4096));
 
-
+    return pulsos;
+  }
 
   public void returnhome(boolean status) {
 
@@ -162,66 +157,62 @@ double pulsos=((((((gradosSup/2)/360)*3.285714)*100)*4096));
 
   }
 
-public void movimiento_brazo_angulo(double gradosinferior, double gradosuperior){
+  public void movimiento_brazo_angulo(double gradosinferior, double gradosuperior) {
 
-/*double movimientosuperior=(gradosEjeSuperior()-gradosuperior)*0.04;
-double movimientoinferior=(gradosEjeInferior()-gradosinferior)*0.03;
+    /*
+     * double movimientosuperior=(gradosEjeSuperior()-gradosuperior)*0.04;
+     * double movimientoinferior=(gradosEjeInferior()-gradosinferior)*0.03;
+     * 
+     * 
+     * double conversiontopesuperior;
+     * double conversiontopeinferior;
+     * 
+     * 
+     * if(movimientoinferior<-topesvelocidad.Inferior){
+     * conversiontopeinferior=-topesvelocidad.Inferior;
+     * }else if(movimientoinferior>topesvelocidad.Inferior){
+     * conversiontopeinferior=topesvelocidad.Inferior;
+     * }else{
+     * conversiontopeinferior=movimientoinferior;
+     * }
+     * 
+     * 
+     * if(movimientosuperior>topesvelocidad.Superior){
+     * conversiontopesuperior=topesvelocidad.Superior;
+     * }else if(movimientosuperior<-topesvelocidad.Superior){
+     * conversiontopesuperior=-topesvelocidad.Superior;
+     * }else{
+     * conversiontopesuperior=movimientosuperior;
+     * 
+     * }
+     **/
 
+    double posicion_inferior = gradosEjeInferiorApulsos(gradosinferior);
+    double posicion_superior = gradosEjeSuperiorApulsos(gradosuperior);
 
-double conversiontopesuperior;
-double conversiontopeinferior;
-
-
-if(movimientoinferior<-topesvelocidad.Inferior){
-  conversiontopeinferior=-topesvelocidad.Inferior;
-}else if(movimientoinferior>topesvelocidad.Inferior){
-  conversiontopeinferior=topesvelocidad.Inferior;
-}else{
-  conversiontopeinferior=movimientoinferior;
-}
-
-
-if(movimientosuperior>topesvelocidad.Superior){
-  conversiontopesuperior=topesvelocidad.Superior;
-}else if(movimientosuperior<-topesvelocidad.Superior){
-  conversiontopesuperior=-topesvelocidad.Superior;
-}else{
-  conversiontopesuperior=movimientosuperior;
-
-}**/
-
-
-double posicion_inferior=gradosEjeInferiorApulsos(gradosinferior);
-double posicion_superior=gradosEjeSuperiorApulsos(gradosuperior);
-
-
-motejearriba.set(ControlMode.Position, posicion_superior);
-motejeabajo.set(ControlMode.Position , posicion_inferior);
-
-}
-
-
-public void ResetEncoderLimit(){
-
-  if (!limitejesuperior.get()) {
-
-    motejearriba.setSelectedSensorPosition(0);
+    motejearriba.set(ControlMode.Position, posicion_superior);
+    motejeabajo.set(ControlMode.Position, posicion_inferior);
 
   }
 
-  if (!limitejeinferior.get()) {
+  public void ResetEncoderLimit() {
 
-    motejeabajo.setSelectedSensorPosition(0);
+    if (!limitejesuperior.get()) {
 
+      motejearriba.setSelectedSensorPosition(0);
+
+    }
+
+    if (!limitejeinferior.get()) {
+
+      motejeabajo.setSelectedSensorPosition(0);
+
+    }
   }
-}
 
-
-
-
-
-  //Configuracion de motores para que no se muevan mucho al momento de tener el robot encendido
-// *NO MOVERLE*
+  // Configuracion de motores para que no se muevan mucho al momento de tener el
+  // robot encendido
+  // *NO MOVERLE*
   public void config_motor_eje_inf() {
 
     motejeabajo.configFactoryDefault();
@@ -240,14 +231,15 @@ public void ResetEncoderLimit(){
     motejeabajo.config_kD(KPIDejeinferior.kPIDLoopIdx, KPIDejeinferior.kD,
         KPIDejeinferior.kTimeoutMs);
 
-        motejeabajo.setInverted(true);
-        motejeabajo.setSensorPhase(true);
+    motejeabajo.setInverted(true);
+    motejeabajo.setSensorPhase(true);
   }
 
-  //Configuracion de motores para que no se muevan mucho al momento de tener el robot encendido
+  // Configuracion de motores para que no se muevan mucho al momento de tener el
+  // robot encendido
   // *NO MOVERLE*
   public void config_motor_eje_sup() {
-motejearriba.configFactoryDefault();
+    motejearriba.configFactoryDefault();
     motejearriba.configNominalOutputForward(0, KPIDejesuperior.kTimeoutMs);
     motejearriba.configNominalOutputReverse(0, KPIDejesuperior.kTimeoutMs);
     motejearriba.configPeakOutputForward(1, KPIDejesuperior.kTimeoutMs);
@@ -262,8 +254,8 @@ motejearriba.configFactoryDefault();
     motejearriba.config_kD(KPIDejesuperior.kPIDLoopIdx, KPIDejesuperior.kD,
         KPIDejesuperior.kTimeoutMs);
 
-        motejearriba.setSensorPhase(true);
-        motejearriba.setInverted(true);
+    motejearriba.setSensorPhase(true);
+    motejearriba.setInverted(true);
   }
 
   /*

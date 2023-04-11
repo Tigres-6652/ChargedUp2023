@@ -13,11 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GarraSubsystem extends SubsystemBase {
 
+  WPI_VictorSPX motor_garra = new WPI_VictorSPX(9);
 
-  WPI_VictorSPX motor_garra=new WPI_VictorSPX(9);
-
-
-  PowerDistribution pdp=new PowerDistribution(0, ModuleType.kCTRE);
+  PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
 
   public GarraSubsystem() {
   }
@@ -25,24 +23,22 @@ public class GarraSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-
   }
 
-  public void stategarra(boolean lanzarcubo, boolean lanzarcono,boolean agarrar) {
+  public void stategarra(boolean lanzarcubo, boolean lanzarcono, boolean agarrar) {
 
-SmartDashboard.putNumber("motor_garra",pdp.getCurrent(4));
+    SmartDashboard.putNumber("motor_garra", pdp.getCurrent(4));
 
-    if (( lanzarcubo)) {
+    if ((lanzarcubo)) {
 
       motor_garra.set(-1);
 
-    }else if (lanzarcono) {
+    } else if (lanzarcono) {
       motor_garra.set(-0.2);
 
-        
-    }else if(agarrar){
+    } else if (agarrar) {
       motor_garra.set(0.4);
-    }else{
+    } else {
 
       motor_garra.set(0);
 
@@ -50,7 +46,7 @@ SmartDashboard.putNumber("motor_garra",pdp.getCurrent(4));
 
   }
 
-  public  void velocidadmotor(double velocidad){
+  public void velocidadmotor(double velocidad) {
 
     motor_garra.set(velocidad);
 

@@ -8,17 +8,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DriveTrainCmd extends CommandBase {
   private final DriveSubsystem driveSubsystem;
   private Supplier<Double> funciongiro, funcionVelocidad;
-  private Supplier<Boolean> autoapuntado,apuntadoagarrar,balanceo,robotSinmovimiento;
+  private Supplier<Boolean> autoapuntado, apuntadoagarrar, balanceo, robotSinmovimiento;
 
   public DriveTrainCmd(DriveSubsystem driveSubsystem, Supplier<Double> funcionVelocidad, Supplier<Double> funciongiro,
-      Supplier<Boolean> autoapuntado, Supplier<Boolean> balanceo, Supplier <Boolean> apuntadoagarrar,Supplier <Boolean> robotSinmovimiento) {
+      Supplier<Boolean> autoapuntado, Supplier<Boolean> balanceo, Supplier<Boolean> apuntadoagarrar,
+      Supplier<Boolean> robotSinmovimiento) {
 
     this.funcionVelocidad = funcionVelocidad;
     this.funciongiro = funciongiro;
     this.autoapuntado = autoapuntado;
     this.balanceo = balanceo;
-    this.apuntadoagarrar=apuntadoagarrar;
-    this.robotSinmovimiento=robotSinmovimiento;
+    this.apuntadoagarrar = apuntadoagarrar;
+    this.robotSinmovimiento = robotSinmovimiento;
 
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
@@ -28,7 +29,7 @@ public class DriveTrainCmd extends CommandBase {
   public void initialize() {
 
     driveSubsystem.resetSensors();
-    
+
     driveSubsystem.configPIDDrivTr();
 
   }
@@ -36,13 +37,14 @@ public class DriveTrainCmd extends CommandBase {
   @Override
   public void execute() {
 
-    driveSubsystem.CHASIS(funcionVelocidad.get(), funciongiro.get(), autoapuntado.get(), balanceo.get(), apuntadoagarrar.get(), robotSinmovimiento.get());
+    driveSubsystem.CHASIS(funcionVelocidad.get(), funciongiro.get(), autoapuntado.get(), balanceo.get(),
+        apuntadoagarrar.get(), robotSinmovimiento.get());
 
   }
 
   @Override
   public void end(boolean interrupted) {
-driveSubsystem.CHASIS(0, 0, false, false, false, false);
+    driveSubsystem.CHASIS(0, 0, false, false, false, false);
   }
 
   @Override
