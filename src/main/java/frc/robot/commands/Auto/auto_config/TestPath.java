@@ -22,12 +22,12 @@ public class TestPath extends SequentialCommandGroup {
   /** Creates a new TestPath. */
 
   private static final Trajectory TestPath = PathPlanner.loadPath("TestPath", AutoConstants.kMaxSpeedMetersPerSecond,
-      AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+      AutoConstants.kMaxAccelerationMetersPerSecondSquared,true);
 
   public TestPath() {
     
     addCommands(
-      new ParallelDeadlineGroup(new WaitCommand(0.1), new SequentialCommandGroup(new ResetSensors())),
+      new ParallelDeadlineGroup(new WaitCommand(0.1), new SequentialCommandGroup(new ResetSensors(RobotContainer.driveSubsystem))),
         new ParallelDeadlineGroup(new DrivetrainRamseteCommand(RobotContainer.driveSubsystem, TestPath).robotRelative()));
                 
   }

@@ -7,9 +7,9 @@ package frc.robot.commands.Auto.Cmd;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class agarrarGM extends CommandBase {
+public class MantenerGP extends CommandBase {
   /** Creates a new agarrarGM. */
-  public agarrarGM() {
+  public MantenerGP() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

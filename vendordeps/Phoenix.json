@@ -4,7 +4,7 @@
     "version": "5.30.4+23.0.8",
     "frcYear": 2023,
     "uuid": "ab676553-b602-441f-a38d-f1296eff6537",
-    "mavenUrls": [
+    "mavenUrls": [  
         "https://maven.ctr-electronics.com/release/"
     ],
     "jsonUrl": "https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2023-latest.json",

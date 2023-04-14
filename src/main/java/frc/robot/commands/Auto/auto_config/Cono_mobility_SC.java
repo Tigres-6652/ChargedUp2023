@@ -22,12 +22,12 @@ import frc.robot.commands.Auto.Cmd.soltarcono;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Cono_engaged extends SequentialCommandGroup {
+public class Cono_mobility_SC extends SequentialCommandGroup {
 
-  private static final Trajectory Engaged = PathPlanner.loadPath("Engaged", AutoConstants.kMaxSpeedMetersPerSecond,
+  private static final Trajectory mobility_sin_cables = PathPlanner.loadPath("mobility_sin_cables", AutoConstants.kMaxSpeedMetersPerSecond,
   AutoConstants.kMaxAccelerationMetersPerSecondSquared,true);
   
-  public Cono_engaged() {
+  public Cono_mobility_SC() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(    
@@ -37,10 +37,8 @@ public class Cono_engaged extends SequentialCommandGroup {
       new ParallelDeadlineGroup(new WaitCommand(0.4) , new SequentialCommandGroup(new soltarcono())),
       new ParallelDeadlineGroup(new WaitCommand(1),new SequentialCommandGroup(new BrazoCmd(RobotContainer.brazosubsystem,   () -> 0.0, () -> 0.0, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false))),
       new ParallelDeadlineGroup(new WaitCommand(0.1), new SequentialCommandGroup(new ResetSensors(RobotContainer.driveSubsystem))),
-      new ParallelDeadlineGroup(new DrivetrainRamseteCommand(RobotContainer.driveSubsystem,Engaged).robotRelative()),
+      new ParallelDeadlineGroup(new DrivetrainRamseteCommand(RobotContainer.driveSubsystem, mobility_sin_cables).robotRelative())
 
-      new ParallelDeadlineGroup(new WaitCommand(3.4),new SequentialCommandGroup(new DriveTrainCmd(RobotContainer.driveSubsystem, ()->0.0, ()->0.0, ()->false, ()->true, ()->false, ()->true)))
-  
 );
   }
 }

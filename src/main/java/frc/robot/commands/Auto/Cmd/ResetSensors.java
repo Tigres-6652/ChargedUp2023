@@ -5,17 +5,24 @@
 package frc.robot.commands.Auto.Cmd;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class ResetSensors extends CommandBase {
-  /** Creates a new ResetSensors. */
-  public ResetSensors() {
-    // Use addRequirements() here to declare subsystem dependencies.
+
+  private final DriveSubsystem driveSubsystem;
+
+  public ResetSensors(DriveSubsystem driveSubsystem) {
+    this.driveSubsystem = driveSubsystem;
+
+    addRequirements(driveSubsystem);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
 
+    driveSubsystem.resetSensors();
     
   }
 

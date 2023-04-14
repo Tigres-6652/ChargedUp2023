@@ -10,8 +10,12 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.BrazoCmd;
 import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.GarraCmd;
-import frc.robot.commands.Auto.auto_config.Cono_engaged;
-import frc.robot.commands.Auto.auto_config.Cubo_engaged;
+import frc.robot.commands.Auto.auto_config.Cono_engaged_Y_MB;
+import frc.robot.commands.Auto.auto_config.Cono_mobility_CC;
+import frc.robot.commands.Auto.auto_config.Cono_mobility_SC;
+import frc.robot.commands.Auto.auto_config.Cubo_Mobility_CC;
+import frc.robot.commands.Auto.auto_config.Cubo_Mobility_SC;
+import frc.robot.commands.Auto.auto_config.Cubo_engaged_y_MB;
 import frc.robot.commands.Auto.auto_config.TestPath;
 import frc.robot.commands.Auto.auto_config.engaged;
 import frc.robot.subsystems.BrazoSubsystem;
@@ -87,10 +91,16 @@ new JoystickButton(XboxController_secondary, 6).toggleOnTrue(new BrazoCmd(brazos
 
     autoChooser.setDefaultOption("Null autonomous", null);
     autoChooser.addOption("Mobility", new engaged());
-    autoChooser.addOption("Cono en mid y engaged", new Cono_engaged());
-    autoChooser.addOption("Cubo High y engaged", new Cubo_engaged());
+    autoChooser.addOption("Cono en mid y engaged", new Cono_engaged_Y_MB());
+    autoChooser.addOption("Cono mobility, zona cables", new Cono_mobility_CC());
+    autoChooser.addOption("Cono mobility, zona sin cables", new Cono_mobility_SC());
+
+    autoChooser.addOption("Cubo High y engaged", new Cubo_engaged_y_MB());
+    autoChooser.addOption("Cubo mobility, zona cables", new Cubo_Mobility_CC());
+    autoChooser.addOption("Cubo mobility, zona sin cables", new Cubo_Mobility_SC());
 
     autoChooser.addOption("Test Path", new TestPath());
+
 
     SmartDashboard.putData("Autonomous", autoChooser);
   }

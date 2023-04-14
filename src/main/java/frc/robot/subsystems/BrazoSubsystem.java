@@ -139,17 +139,16 @@ public class BrazoSubsystem extends SubsystemBase {
 
       } else {
 
-        motejeabajo.set(-0.7);
+        motejeabajo.set(-0.8);
 
       }
 
       if (!limitejesuperior.get()) {
 
         motejearriba.set(0);
-
       } else {
 
-        motejearriba.set(-0.7);
+        motejearriba.set(-0.8);
 
       }
 

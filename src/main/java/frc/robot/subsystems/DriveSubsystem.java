@@ -76,6 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("encizq", getLeftEncoderdistance());
     SmartDashboard.putNumber("encder", getRightEncoderdistance());
+
     /**
      * SmartDashboard.putNumber("getTurnRate", getTurnRate());
      * SmartDashboard.putNumber("getheading", getHeading());
@@ -107,8 +108,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void CHASIS(double velocidad, double giro, boolean autoapuntado, boolean balanceo, boolean apuntadoagarrar,
       boolean robotSinmovimiento) {
-
-    /*
+        SmartDashboard.putNumber("acel", MCI1ENC.getSelectedSensorVelocity() / 4096 * Math.PI * 6 * 10 * 2.54 / 100);
+    
+        /*
      * double calculo_encizq;
      * double calculo_encder;
      * 
