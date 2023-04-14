@@ -24,18 +24,20 @@ public class GarraCmd extends CommandBase {
 
   @Override
   public void initialize() {
+    garraSubsystem.configVictor();
+    garraSubsystem.stateagarrarReset();
   }
 
   @Override
   public void execute() {
 
-    garraSubsystem.stategarra(lanzarcubo.get(), lanzarcono.get(), agarrargp.get());
+    garraSubsystem.stategarra2(lanzarcubo.get(), lanzarcono.get(), agarrargp.get());
   }
 
   @Override
   public void end(boolean interrupted) {
 
-    garraSubsystem.stategarra(false, false, false);
+    garraSubsystem.stategarra2(false, false, false);
 
   }
 

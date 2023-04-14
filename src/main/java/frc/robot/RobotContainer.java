@@ -12,7 +12,8 @@ import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.GarraCmd;
 import frc.robot.commands.Auto.auto_config.Cono_engaged;
 import frc.robot.commands.Auto.auto_config.Cubo_engaged;
-import frc.robot.commands.Auto.auto_config.mobility;
+import frc.robot.commands.Auto.auto_config.TestPath;
+import frc.robot.commands.Auto.auto_config.engaged;
 import frc.robot.subsystems.BrazoSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GarraSubsystem;
@@ -85,9 +86,11 @@ new JoystickButton(XboxController_secondary, 6).toggleOnTrue(new BrazoCmd(brazos
   public void configureAuto() {
 
     autoChooser.setDefaultOption("Null autonomous", null);
-    autoChooser.addOption("Mobility", new mobility());
+    autoChooser.addOption("Mobility", new engaged());
     autoChooser.addOption("Cono en mid y engaged", new Cono_engaged());
     autoChooser.addOption("Cubo High y engaged", new Cubo_engaged());
+
+    autoChooser.addOption("Test Path", new TestPath());
 
     SmartDashboard.putData("Autonomous", autoChooser);
   }

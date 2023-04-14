@@ -211,23 +211,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     } else {
 
-      if (apuntadoagarrar) {
-
-        cambiovel1 = 0.75;
-        cambiovel2 = 0.75;
-
-      } else {
-        cambiovel1 = 1;
-        cambiovel2 = 1;
-      }
 
       chasis.arcadeDrive(velocidad, giro);
-
-      MCI2.follow(MCI1ENC);
-      MCI3.follow(MCI1ENC);
-
-      MCD5.follow(MCD4ENC);
-      MCD6.follow(MCD4ENC);
 
       posicionfijaizq = MCI1ENC.getSelectedSensorPosition();
       posicionfijader = MCD4ENC.getSelectedSensorPosition();
@@ -245,8 +230,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void set_distance(double distancia) {
 
-    MCI1ENC.set(ControlMode.Position, distancia);
-    MCD4ENC.set(ControlMode.Position, distancia);
+double pulses=DistanceToPulses(distancia);
+
+    MCI1ENC.set(ControlMode.Position, pulses);
+    MCD4ENC.set(ControlMode.Position, pulses);
 
     MCI2.follow(MCI1ENC);
     MCI3.follow(MCI1ENC);
@@ -332,13 +319,15 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double getHeading() {
 
-    return gyro.getAngle();
+    return 0;
+    //return gyro.getAngle();
     // return -m_gyro.getRotation2d().getDegrees();
   }
 
   public double getTurnRate() {
 
-    return gyro.getRate();
+    return 0;
+    //return gyro.getRate();
     // return m_gyro.getRate();
   }
 
@@ -346,177 +335,12 @@ public class DriveSubsystem extends SubsystemBase {
 
     // return m_gyro.getRotation2d();
 
-    return Rotation2d.fromDegrees(gyro.getRate());
+    return Rotation2d.fromDegrees(0);
+    //return Rotation2d.fromDegrees(gyro.getRate());
   }
 
   public void configPIDDrivTr() {
 
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    MCI1ENC.configFactoryDefault();
-
-    /* Config neutral deadband to be the smallest possible */
-    MCI1ENC.configNeutralDeadband(0.001);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    MCI1ENC.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
-        Constants.KPIDchasis.kPIDLoopIdx,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the peak and nominal outputs */
-    MCI1ENC.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the Velocity closed loop gains in slot0 */
-    MCI1ENC.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI1ENC.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    MCI2.configFactoryDefault();
-
-    /* Config neutral deadband to be the smallest possible */
-    MCI2.configNeutralDeadband(0.001);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    MCI2.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
-        Constants.KPIDchasis.kPIDLoopIdx,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the peak and nominal outputs */
-    MCI2.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
-    MCI2.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
-    MCI2.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
-    MCI2.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the Velocity closed loop gains in slot0 */
-    MCI2.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI2.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI2.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI2.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    MCI3.configFactoryDefault();
-
-    /* Config neutral deadband to be the smallest possible */
-    MCI3.configNeutralDeadband(0.001);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    MCI3.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
-        Constants.KPIDchasis.kPIDLoopIdx,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the peak and nominal outputs */
-    MCI3.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
-    MCI3.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
-    MCI3.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
-    MCI3.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the Velocity closed loop gains in slot0 */
-    MCI3.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI3.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI3.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCI3.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    // MCI1ENC.configOpenloopRamp(2.0);
-
-    // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    MCD4ENC.configFactoryDefault();
-
-    /* Config neutral deadband to be the smallest possible */
-    MCD4ENC.configNeutralDeadband(0.001);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    MCD4ENC.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
-        Constants.KPIDchasis.kPIDLoopIdx,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the peak and nominal outputs */
-    MCD4ENC.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the Velocity closed loop gains in slot0 */
-    MCD4ENC.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD4ENC.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    MCD5.configFactoryDefault();
-
-    /* Config neutral deadband to be the smallest possible */
-    MCD5.configNeutralDeadband(0.001);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    MCD5.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
-        Constants.KPIDchasis.kPIDLoopIdx,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the peak and nominal outputs */
-    MCD5.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
-    MCD5.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
-    MCD5.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
-    MCD5.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the Velocity closed loop gains in slot0 */
-    MCD5.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD5.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD5.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD5.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    MCD6.configFactoryDefault();
-
-    /* Config neutral deadband to be the smallest possible */
-    MCD6.configNeutralDeadband(0.001);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    MCD6.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative,
-        Constants.KPIDchasis.kPIDLoopIdx,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the peak and nominal outputs */
-    MCD6.configNominalOutputForward(0, Constants.KPIDchasis.kTimeoutMs);
-    MCD6.configNominalOutputReverse(0, Constants.KPIDchasis.kTimeoutMs);
-    MCD6.configPeakOutputForward(1, Constants.KPIDchasis.kTimeoutMs);
-    MCD6.configPeakOutputReverse(-1, Constants.KPIDchasis.kTimeoutMs);
-
-    /* Config the Velocity closed loop gains in slot0 */
-    MCD6.config_kF(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kF,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD6.config_kP(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kP,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD6.config_kI(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kI,
-        Constants.KPIDchasis.kTimeoutMs);
-    MCD6.config_kD(Constants.KPIDchasis.kPIDLoopIdx, Constants.KPIDchasis.kGains_Velocit.kD,
-        Constants.KPIDchasis.kTimeoutMs);
-
-    // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#
 
     MCI1ENC.setInverted(false);
     MCI1ENC.setSensorPhase(false);
@@ -541,6 +365,18 @@ public class DriveSubsystem extends SubsystemBase {
 
     MCD5.follow(MCD4ENC);
     MCD6.follow(MCD4ENC);
+
+  }
+
+  public void set_ramp(double ramp){
+
+MCI1ENC.configOpenloopRamp(ramp);
+MCI2.configOpenloopRamp(ramp);
+MCI3.configOpenloopRamp(ramp);
+
+MCD4ENC.configOpenloopRamp(ramp);
+MCD5.configOpenloopRamp(ramp);
+MCD6.configOpenloopRamp(ramp);
 
   }
 

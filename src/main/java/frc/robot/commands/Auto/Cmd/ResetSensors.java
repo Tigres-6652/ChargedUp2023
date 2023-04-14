@@ -5,33 +5,27 @@
 package frc.robot.commands.Auto.Cmd;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 
-public class soltarcono extends CommandBase {
-  /** Creates a new soltarcono. */
-  public soltarcono() {
+public class ResetSensors extends CommandBase {
+  /** Creates a new ResetSensors. */
+  public ResetSensors() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    RobotContainer.garraSusbsytem.velocidadmotor(-0.23);
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-    RobotContainer.garraSusbsytem.velocidadmotor(-0);
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

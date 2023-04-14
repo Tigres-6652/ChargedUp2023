@@ -17,27 +17,71 @@ public class GarraSubsystem extends SubsystemBase {
 
   PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
 
+  boolean stateagarrar;
   public GarraSubsystem() {
   }
 
   @Override
   public void periodic() {
-
+    SmartDashboard.putBoolean("GP en posicion", pdp.getCurrent(4)>5);
+    SmartDashboard.putNumber("motor_garra", pdp.getCurrent(4));
   }
 
-  public void stategarra(boolean lanzarcubo, boolean lanzarcono, boolean agarrar) {
+  /*public void stategarra(boolean lanzarcubo, boolean lanzarcono, boolean agarrar) {
 
-    SmartDashboard.putNumber("motor_garra", pdp.getCurrent(4));
 
     if ((lanzarcubo)) {
 
       motor_garra.set(-1);
 
     } else if (lanzarcono) {
+
       motor_garra.set(-0.2);
 
     } else if (agarrar) {
-      motor_garra.set(0.4);
+
+      motor_garra.set(0.45);
+
+    } else {
+
+      motor_garra.set(0);
+
+    }
+
+  }*/
+
+public void stateagarrarReset(){
+
+  stateagarrar=true;
+
+}
+
+  public void stategarra2(boolean lanzarcubo, boolean lanzarcono, boolean agarrar) {
+
+
+    if ((lanzarcubo)) {
+
+      motor_garra.set(-1);
+
+    } else if (lanzarcono) {
+      
+      motor_garra.set(-0.2);
+
+    } else if (agarrar) {
+
+      if(stateagarrar){
+        motor_garra.set(0.65);
+
+      }else{
+
+        motor_garra.set(0.27);
+
+      }
+
+       if(pdp.getCurrent(4)>30){
+        stateagarrar=false;
+      }
+
     } else {
 
       motor_garra.set(0);
@@ -50,5 +94,12 @@ public class GarraSubsystem extends SubsystemBase {
 
     motor_garra.set(velocidad);
 
+  }
+
+
+  public void configVictor(){
+
+    motor_garra.configFactoryDefault();
+    //motor_garra.configVoltageCompSaturation(12);
   }
 }

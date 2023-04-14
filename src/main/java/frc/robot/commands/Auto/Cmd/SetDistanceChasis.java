@@ -4,24 +4,42 @@
 
 package frc.robot.commands.Auto.Cmd;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import java.util.function.Supplier;
 
-public class soltarcono extends CommandBase {
-  /** Creates a new soltarcono. */
-  public soltarcono() {
-    // Use addRequirements() here to declare subsystem dependencies.
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveSubsystem;
+
+public class SetDistanceChasis extends CommandBase {
+
+
+  private final DriveSubsystem driveSubsystem;
+  private Supplier<Double> distance_mts;
+
+  public SetDistanceChasis(DriveSubsystem driveSubsystem,Supplier<Double> distance_mts){
+  
+    this.distance_mts=distance_mts;
+  this.driveSubsystem = driveSubsystem;
+    addRequirements(driveSubsystem);
+   
+
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+driveSubsystem.resetEncoders();
+
+driveSubsystem.set_ramp(0.2);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.garraSusbsytem.velocidadmotor(-0.23);
+
+driveSubsystem.set_distance(distance_mts.get());
 
   }
 
@@ -29,7 +47,8 @@ public class soltarcono extends CommandBase {
   @Override
   public void end(boolean interrupted) {
 
-    RobotContainer.garraSusbsytem.velocidadmotor(-0);
+    driveSubsystem.CHASIS(0, 0, false, false, false, false);
+    driveSubsystem.set_ramp(0);
 
   }
 

@@ -11,20 +11,20 @@ public class Constants {
 
         public static final class posicionConodoublesubstation { // teleop
 
-            public static double ejesuperior = 89;
-            public static double ejeinferior = 0;
+            public static double ejesuperior = 87;
+            public static double ejeinferior = 7;
 
         }
 
         public static final class posicionCuboDoubleSub {
 
-            public static double ejesuperior = 86;
-            public static double ejeinferior = 0;
+            public static double ejesuperior = 84;
+            public static double ejeinferior = 7;
 
         }
 
         public static final class posicioncubopiso {
-            public static double ejesuperior = 158;
+            public static double ejesuperior = 145;
             public static double ejeinferior = 97;
         }
 
@@ -36,13 +36,13 @@ public class Constants {
         }
 
         public static final class posiciondejarcono {
-            public static double ejesuperior = 200;
-            public static double ejeinferior = 84;
+            public static double ejesuperior = 190;
+            public static double ejeinferior = 88;
         }
 
         public static final class posiciondejarCubo {
-            public static double ejesuperior = 200;
-            public static double ejeinferior = 84;
+            public static double ejesuperior = 95;
+            public static double ejeinferior = 30;
         }
 
         public static final class posiciondejarCuboArriba {
@@ -51,8 +51,8 @@ public class Constants {
         }
 
         public static final class posiciondejarAbajo {
-            public static double ejesuperior = 200;
-            public static double ejeinferior = 84;
+            public static double ejesuperior = 33;
+            public static double ejeinferior = 0;
         }
 
         /*
@@ -117,8 +117,8 @@ public class Constants {
 
     // NO MOVERLE AL MENOS SI HICISTE EL TUNEO DE PID CON SYSTEM IDENTIFICATION TOOL
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 2;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
     }
@@ -138,9 +138,9 @@ public class Constants {
         public static final int kSlotIdx = 0;
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
-        public final static double KP = 0.1;
+        public final static double KP = 0.2;
         public final static double kI = 0;
-        public final static double kD = 0.01;
+        public final static double kD = 0.1;
         public final static double kF = 0;
         public final static int kIzone = 300;
         public final static double kPeakOutput = 1.0;

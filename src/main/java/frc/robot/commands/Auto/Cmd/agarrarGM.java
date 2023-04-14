@@ -7,9 +7,9 @@ package frc.robot.commands.Auto.Cmd;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class soltarcono extends CommandBase {
-  /** Creates a new soltarcono. */
-  public soltarcono() {
+public class agarrarGM extends CommandBase {
+  /** Creates a new agarrarGM. */
+  public agarrarGM() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -21,7 +21,7 @@ public class soltarcono extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.garraSusbsytem.velocidadmotor(-0.23);
+    RobotContainer.garraSusbsytem.velocidadmotor(0.45);
 
   }
 
