@@ -11,21 +11,21 @@ public class Constants {
 
         public static final class posicionConodoublesubstation { // teleop
 
-            public static double ejesuperior = 87;
+            public static double ejesuperior = 83;
             public static double ejeinferior = 7;
 
         }
 
         public static final class posicionCuboDoubleSub {
 
-            public static double ejesuperior = 84;
+            public static double ejesuperior = 80;
             public static double ejeinferior = 7;
 
         }
 
         public static final class posicioncubopiso {
-            public static double ejesuperior = 145;
-            public static double ejeinferior = 97;
+            public static double ejesuperior = 1;
+            public static double ejeinferior = 98;
         }
 
         public static final class posicionSafeArm { // teleop

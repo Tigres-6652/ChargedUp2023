@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.BrazoCmd;
+import frc.robot.commands.BrazoConfig;
 import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.GarraCmd;
 import frc.robot.commands.Auto.auto_config.Cono_engaged_Y_MB;
@@ -15,9 +16,12 @@ import frc.robot.commands.Auto.auto_config.Cono_mobility_CC;
 import frc.robot.commands.Auto.auto_config.Cono_mobility_SC;
 import frc.robot.commands.Auto.auto_config.Cubo_Mobility_CC;
 import frc.robot.commands.Auto.auto_config.Cubo_Mobility_SC;
+import frc.robot.commands.Auto.auto_config.Cubo_engaged;
 import frc.robot.commands.Auto.auto_config.Cubo_engaged_y_MB;
 import frc.robot.commands.Auto.auto_config.TestPath;
 import frc.robot.commands.Auto.auto_config.engaged;
+import frc.robot.commands.Auto.auto_config.mobility_CC;
+import frc.robot.commands.Auto.auto_config.mobility_SC;
 import frc.robot.subsystems.BrazoSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GarraSubsystem;
@@ -31,9 +35,11 @@ public class RobotContainer {
 
   public Joystick XboxController_main = new Joystick(0);
   public Joystick XboxController_secondary = new Joystick(1);
-
   private static SendableChooser<Command> autoChooser = new SendableChooser<>();
 
+boolean Test_Mode=false;
+double inferior;
+double superior;
 
   public RobotContainer() {
     Controles();
@@ -58,6 +64,10 @@ public class RobotContainer {
   new POVButton(XboxController_main, 180).toggleOnTrue(new GarraCmd(garraSusbsytem, ()->false, ()->true, ()->false));
   new POVButton(XboxController_main, 270).toggleOnTrue(new GarraCmd(garraSusbsytem, ()->false, ()->false, ()->true));
 
+if(Test_Mode){
+  brazosubsystem.setDefaultCommand(new BrazoConfig(brazosubsystem));
+
+}else{
 
   /*
  * 1  BotonDesbloqueo
@@ -71,7 +81,6 @@ public class RobotContainer {
  * 9  DejarCuboarriba
  * 10 Dejarabajo
  */
-
   //                                                                                                                                                                                                                1           2         3          4         5          6         7           8          9          10
 new JoystickButton(XboxController_secondary, 1).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1), ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->true));
 new JoystickButton(XboxController_secondary, 2).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1), ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false));
@@ -84,23 +93,27 @@ new JoystickButton(XboxController_secondary, 6).toggleOnTrue(new BrazoCmd(brazos
      new POVButton(XboxController_secondary, 270).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
      new POVButton(XboxController_secondary, 90). toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false));
      new POVButton(XboxController_secondary, 180).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false)); 
-
+    }
   }
 
   public void configureAuto() {
 
     autoChooser.setDefaultOption("Null autonomous", null);
-    autoChooser.addOption("Mobility", new engaged());
-    autoChooser.addOption("Cono en mid y engaged", new Cono_engaged_Y_MB());
+    autoChooser.addOption("engaged", new engaged());
+    autoChooser.addOption("mobility con cables", new mobility_CC());
+    autoChooser.addOption("mobility sin cables", new mobility_SC());
+
+    autoChooser.addOption("Cono, engaged y mobility", new Cono_engaged_Y_MB());
+    autoChooser.addOption("Cono, engaged", getAutonomousCommand());
     autoChooser.addOption("Cono mobility, zona cables", new Cono_mobility_CC());
     autoChooser.addOption("Cono mobility, zona sin cables", new Cono_mobility_SC());
 
-    autoChooser.addOption("Cubo High y engaged", new Cubo_engaged_y_MB());
+    autoChooser.addOption("Cubo, engaged y mobility", new Cubo_engaged_y_MB());
+    autoChooser.addOption("Cubo, engaged", new Cubo_engaged());
     autoChooser.addOption("Cubo mobility, zona cables", new Cubo_Mobility_CC());
     autoChooser.addOption("Cubo mobility, zona sin cables", new Cubo_Mobility_SC());
 
     autoChooser.addOption("Test Path", new TestPath());
-
 
     SmartDashboard.putData("Autonomous", autoChooser);
   }

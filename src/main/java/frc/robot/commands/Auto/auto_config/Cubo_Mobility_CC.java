@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.BrazoCmd;
-import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.Auto.DrivetrainRamseteCommand;
 import frc.robot.commands.Auto.Cmd.ResetSensors;
 import frc.robot.commands.Auto.Cmd.SoltarCubo;
@@ -35,8 +34,6 @@ public class Cubo_Mobility_CC extends SequentialCommandGroup {
     new ParallelDeadlineGroup(new WaitCommand(0.7) , new SequentialCommandGroup(new SoltarCubo())),
     new ParallelDeadlineGroup(new WaitCommand(1),new SequentialCommandGroup(new BrazoCmd(RobotContainer.brazosubsystem,   () -> 0.0, () -> 0.0, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false))),
     new ParallelDeadlineGroup(new WaitCommand(1),new SequentialCommandGroup(new BrazoCmd(RobotContainer.brazosubsystem,   () -> 0.0, () -> 0.0, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false))),
-    /*new ParallelDeadlineGroup(new WaitCommand(4),new SequentialCommandGroup(new SetDistanceChasis(RobotContainer.driveSubsystem, ()->-3.77))),
-    new ParallelDeadlineGroup(new WaitCommand(3),new SequentialCommandGroup(new SetDistanceChasis(RobotContainer.driveSubsystem, ()->1.9))),*/
     new ParallelDeadlineGroup(new WaitCommand(0.1), new SequentialCommandGroup(new ResetSensors(RobotContainer.driveSubsystem))),
     new ParallelDeadlineGroup(new DrivetrainRamseteCommand(RobotContainer.driveSubsystem,mobility_cables).robotRelative())
 

@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.BrazoCmd;
-import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.Auto.DrivetrainRamseteCommand;
 import frc.robot.commands.Auto.Cmd.ResetSensors;
 import frc.robot.commands.Auto.Cmd.MantenerGP;
@@ -28,9 +27,9 @@ public class Cono_mobility_SC extends SequentialCommandGroup {
   AutoConstants.kMaxAccelerationMetersPerSecondSquared,true);
   
   public Cono_mobility_SC() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(    
+
       new ParallelDeadlineGroup(new WaitCommand(0.9),new SequentialCommandGroup(new BrazoCmd(RobotContainer.brazosubsystem, () -> 0.0, () -> 0.0, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->false)),new MantenerGP()),
       new ParallelDeadlineGroup(new WaitCommand(0.8),new SequentialCommandGroup(new BrazoCmd(RobotContainer.brazosubsystem, () -> 0.0, () -> 0.0, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false)),new MantenerGP()),
       new ParallelDeadlineGroup(new WaitCommand(0.5),new SequentialCommandGroup(new BrazoCmd(RobotContainer.brazosubsystem, () -> 0.0, () -> 0.0, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false, ()->false)),new MantenerGP()),

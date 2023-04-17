@@ -25,7 +25,7 @@ public class BrazoCmd extends CommandBase {
       Supplier<Boolean> BotonDesbloqueo, Supplier<Boolean> ReturnHome, Supplier<Boolean> ModoSubstationCono,
       Supplier<Boolean> SafeArm, Supplier<Boolean> DejarConoEnmedio, Supplier<Boolean> ModoRecogePiso,
       Supplier<Boolean> ModoSubstationCubo, Supplier<Boolean> DejarCubomid, Supplier<Boolean> DejarCuboarriba,
-      Supplier<Boolean> Dejarabajok) {
+      Supplier<Boolean> Dejarabajo) {
 
     this.ReturnHome = ReturnHome;
     this.ModoSubstationCono = ModoSubstationCono;

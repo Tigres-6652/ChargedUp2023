@@ -23,7 +23,7 @@ public class GarraSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("GP en posicion", pdp.getCurrent(4)>5);
+    SmartDashboard.putBoolean("GP en posicion", stateagarrar);
     SmartDashboard.putNumber("motor_garra", pdp.getCurrent(4));
   }
 
@@ -74,7 +74,7 @@ public void stateagarrarReset(){
 
       }else{
 
-        motor_garra.set(0.27);
+        motor_garra.set(0.2);
 
       }
 
