@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.BrazoCmd;
-import frc.robot.commands.BrazoConfig;
 import frc.robot.commands.DriveTrainCmd;
 import frc.robot.commands.GarraCmd;
 import frc.robot.commands.Auto.auto_config.Cono_engaged_Y_MB;
@@ -37,7 +36,6 @@ public class RobotContainer {
   public Joystick XboxController_secondary = new Joystick(1);
   private static SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-boolean Test_Mode=false;
 double inferior;
 double superior;
 
@@ -64,10 +62,7 @@ double superior;
   new POVButton(XboxController_main, 180).toggleOnTrue(new GarraCmd(garraSusbsytem, ()->false, ()->true, ()->false));
   new POVButton(XboxController_main, 270).toggleOnTrue(new GarraCmd(garraSusbsytem, ()->false, ()->false, ()->true));
 
-if(Test_Mode){
-  brazosubsystem.setDefaultCommand(new BrazoConfig(brazosubsystem));
 
-}else{
 
   /*
  * 1  BotonDesbloqueo
@@ -94,7 +89,7 @@ new JoystickButton(XboxController_secondary, 6).toggleOnTrue(new BrazoCmd(brazos
      new POVButton(XboxController_secondary, 90). toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false));
      new POVButton(XboxController_secondary, 180).toggleOnTrue(new BrazoCmd(brazosubsystem, () -> XboxController_secondary.getRawAxis(5), () -> XboxController_secondary.getRawAxis(1),      ()->false, ()->false, ()->false, ()->false, ()->false, ()->true,  ()->false, ()->false, ()->false, ()->false)); 
     }
-  }
+  
 
   public void configureAuto() {
 

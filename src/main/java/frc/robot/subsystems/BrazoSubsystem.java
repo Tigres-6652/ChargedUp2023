@@ -21,7 +21,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
   CANSparkMax motejesuperioSparkMax= new CANSparkMax(PUERTOSCAN.PuertMotEjeSuperior, MotorType.kBrushless);
 
-  ProfiledPIDController pidprofil = new ProfiledPIDController(0.2, 0, 0.1, new TrapezoidProfile.Constraints(50,60));
+  ProfiledPIDController pidprofilejesup = new ProfiledPIDController(0.2, 0, 0.1, new TrapezoidProfile.Constraints(50,60));
 
   DigitalInput limitejeinferior = new DigitalInput(8);
   DigitalInput limitejesuperior = new DigitalInput(9);
@@ -162,40 +162,12 @@ public class BrazoSubsystem extends SubsystemBase {
   }
 
   public void movimiento_brazo_angulo(double gradosinferior, double gradosuperior) {
-
-    /*
-     * double movimientosuperior=(gradosEjeSuperior()-gradosuperior)*0.04;
-     * double movimientoinferior=(gradosEjeInferior()-gradosinferior)*0.03;
-     * 
-     * 
-     * double conversiontopesuperior;
-     * double conversiontopeinferior;
-     * 
-     * 
-     * if(movimientoinferior<-topesvelocidad.Inferior){
-     * conversiontopeinferior=-topesvelocidad.Inferior;
-     * }else if(movimientoinferior>topesvelocidad.Inferior){
-     * conversiontopeinferior=topesvelocidad.Inferior;
-     * }else{
-     * conversiontopeinferior=movimientoinferior;
-     * }
-     * 
-     * 
-     * if(movimientosuperior>topesvelocidad.Superior){
-     * conversiontopesuperior=topesvelocidad.Superior;
-     * }else if(movimientosuperior<-topesvelocidad.Superior){
-     * conversiontopesuperior=-topesvelocidad.Superior;
-     * }else{
-     * conversiontopesuperior=movimientosuperior;
-     * 
-     * }
-     **/
-
+    
     double posicion_inferior = gradosEjeInferiorApulsos(gradosinferior);
     double posicion_superior = gradosEjeSuperiorApulsos(gradosuperior);
 
-    double cuantotalta=(posicion_superior-gradosEjeSuperior());
-    motejesuperioSparkMax.setVoltage(cuantotalta);
+    //double cuantotalta=(posicion_superior-gradosEjeSuperior());
+    motejesuperioSparkMax.set(pidprofilejesup.calculate(gradosuperior, posicion_superior));
     motejeabajo.set(ControlMode.Position, posicion_inferior*2.5);
 
   }
@@ -243,31 +215,6 @@ motejesuperioSparkMax.getEncoder().setPosition(0);
     motejesuperioSparkMax.setInverted(true);
   }
 
-  // Configuracion de motores para que no se muevan mucho al momento de tener el
-  // robot encendido
-  // *NO MOVERLE*
- /*  public void config_motor_eje_sup() {
-    motejearriba.configFactoryDefault();
-    motejearriba.configNominalOutputForward(0, KPIDejesuperior.kTimeoutMs);
-    motejearriba.configNominalOutputReverse(0, KPIDejesuperior.kTimeoutMs);
-    motejearriba.configPeakOutputForward(1, KPIDejesuperior.kTimeoutMs);
-    motejearriba.configPeakOutputReverse(-1, KPIDejesuperior.kTimeoutMs);
-    /* Config the Velocity closed loop gains in slot0 */
-    /*motejearriba.config_kF(KPIDejesuperior.kPIDLoopIdx, KPIDejesuperior.kF,
-        KPIDejesuperior.kTimeoutMs);
-    motejearriba.config_kP(KPIDejesuperior.kPIDLoopIdx, KPIDejesuperior.KP,
-        KPIDejesuperior.kTimeoutMs);
-    motejearriba.config_kI(KPIDejesuperior.kPIDLoopIdx, KPIDejesuperior.kI,
-        KPIDejesuperior.kTimeoutMs);
-    motejearriba.config_kD(KPIDejesuperior.kPIDLoopIdx, KPIDejesuperior.kD,
-        KPIDejesuperior.kTimeoutMs);
-
-    motejearriba.setSensorPhase(true);
-    motejearriba.setInverted(true);
-  }*/
-
-
-
   /*
    * Engranes Robot, conversion encorders:
    * 
@@ -294,12 +241,6 @@ motejesuperioSparkMax.getEncoder().setPosition(0);
    * 3.285714
    * 
    */
-  public void obtenerpid(){
-
-
-  
-  }
-
 
 }
 
