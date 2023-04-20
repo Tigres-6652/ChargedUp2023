@@ -2,26 +2,31 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KPIDejeinferior;
-import frc.robot.Constants.KPIDejesuperior;
 import frc.robot.Constants.PUERTOSCAN;
 
 public class BrazoSubsystem extends SubsystemBase {
 
   WPI_TalonSRX motejeabajo = new WPI_TalonSRX(PUERTOSCAN.PuertMotEjeinferior);
-  WPI_TalonFX motejearriba = new WPI_TalonFX(PUERTOSCAN.PuertMotEjeSuperior);
+ // WPI_TalonFX motejearriba = new WPI_TalonFX(PUERTOSCAN.PuertMotEjeSuperior);
+
+  CANSparkMax motejesuperioSparkMax= new CANSparkMax(PUERTOSCAN.PuertMotEjeSuperior, MotorType.kBrushless);
+
+  ProfiledPIDController pidprofil = new ProfiledPIDController(0.2, 0, 0.1, new TrapezoidProfile.Constraints(50,60));
 
   DigitalInput limitejeinferior = new DigitalInput(8);
   DigitalInput limitejesuperior = new DigitalInput(9);
 
   public BrazoSubsystem() {
-
   }
 
   @Override
@@ -31,7 +36,7 @@ public class BrazoSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("limitinferior", !limitejeinferior.get());
     SmartDashboard.putNumber("grados eje inferior", gradosEjeInferior());
     SmartDashboard.putNumber("grados eje superior", gradosEjeSuperior());
-
+   //SmartDashboard.get("grados", motejesuperioSparkMax.getEncoder());
   }
 
   public void ejeinferior(double velinf) { // movimiento con control
@@ -62,46 +67,46 @@ public class BrazoSubsystem extends SubsystemBase {
     }
   }
 
-  public void ejesuperior(double velsup) { // movimiento con control
+
+  public void ejesuperior(double velsup ) { // movimiento con control
 
     if (limitejesuperior.get() && gradosEjeSuperior() > -280) {
 
-      motejearriba.set(-velsup);
+      motejesuperioSparkMax.set(-velsup);
 
     } else if (!limitejesuperior.get() && velsup < 0.001) {
 
-      motejearriba.set(-velsup);
+      motejesuperioSparkMax.set(-velsup);
 
     } else if (!limitejesuperior.get() && velsup > 0.001) {
 
-      motejearriba.set(0);
+      motejesuperioSparkMax.set(0);
+
     } else if (gradosEjeSuperior() < -270 && velsup > 0.001 && limitejesuperior.get()) {
-      motejearriba.set(-velsup);
+      motejesuperioSparkMax.set(-velsup);
     } else if (gradosEjeSuperior() < -270 && velsup < 0.001 && limitejesuperior.get()) {
-      motejearriba.set(0);
+      motejesuperioSparkMax.set(0);
 
     }
 
     if (!limitejesuperior.get()) {
 
-      motejearriba.setSelectedSensorPosition(0);
-
+      motejesuperioSparkMax.getEncoder().setPosition(0);
+      
     }
-
-    // motejearriba.set(TalonFXControlMode.Velocity, (velocidadpadarle) )
 
   }
 
   public double gradosEjeSuperior() {
 
-    double pulsosSensor = motejearriba.getSelectedSensorPosition();
+    double pulsosSensor = motejesuperioSparkMax.getEncoder().getPosition();
 
-    double vuelta_eje_con_reduccion = ((pulsosSensor) / (4096) / (100));
+    double vuelta_eje_con_reduccion = ((pulsosSensor) / (100));
 
-    double gradoseje = (vuelta_eje_con_reduccion / 3.285714) * (360) * 2;
+    double gradoseje = (vuelta_eje_con_reduccion / 3.285714) * (360) ;
 
     return gradoseje;
-  }
+  } 
 
   public double gradosEjeInferior() {
 
@@ -117,7 +122,7 @@ public class BrazoSubsystem extends SubsystemBase {
 
   public double gradosEjeSuperiorApulsos(double gradosSup) {
 
-    double pulsos = ((((((gradosSup / 2) / 360) * 3.285714) * 100) * 4096));
+    double pulsos = ((((((gradosSup) / 360) * 3.285714) * 100)));
 
     return pulsos;
   }
@@ -145,10 +150,10 @@ public class BrazoSubsystem extends SubsystemBase {
 
       if (!limitejesuperior.get()) {
 
-        motejearriba.set(0);
+        motejesuperioSparkMax.set(0);
       } else {
 
-        motejearriba.set(-0.8);
+        motejesuperioSparkMax.set(-0.6);
 
       }
 
@@ -189,8 +194,9 @@ public class BrazoSubsystem extends SubsystemBase {
     double posicion_inferior = gradosEjeInferiorApulsos(gradosinferior);
     double posicion_superior = gradosEjeSuperiorApulsos(gradosuperior);
 
-    motejearriba.set(ControlMode.Position, posicion_superior);
-    motejeabajo.set(ControlMode.Position, posicion_inferior);
+    double cuantotalta=(posicion_superior-gradosEjeSuperior());
+    motejesuperioSparkMax.setVoltage(cuantotalta);
+    motejeabajo.set(ControlMode.Position, posicion_inferior*2.5);
 
   }
 
@@ -198,7 +204,8 @@ public class BrazoSubsystem extends SubsystemBase {
 
     if (!limitejesuperior.get()) {
 
-      motejearriba.setSelectedSensorPosition(0);
+    //  motejearriba.setSelectedSensorPosition(0);
+motejesuperioSparkMax.getEncoder().setPosition(0);
 
     }
 
@@ -232,19 +239,21 @@ public class BrazoSubsystem extends SubsystemBase {
 
     motejeabajo.setInverted(true);
     motejeabajo.setSensorPhase(true);
+
+    motejesuperioSparkMax.setInverted(true);
   }
 
   // Configuracion de motores para que no se muevan mucho al momento de tener el
   // robot encendido
   // *NO MOVERLE*
-  public void config_motor_eje_sup() {
+ /*  public void config_motor_eje_sup() {
     motejearriba.configFactoryDefault();
     motejearriba.configNominalOutputForward(0, KPIDejesuperior.kTimeoutMs);
     motejearriba.configNominalOutputReverse(0, KPIDejesuperior.kTimeoutMs);
     motejearriba.configPeakOutputForward(1, KPIDejesuperior.kTimeoutMs);
     motejearriba.configPeakOutputReverse(-1, KPIDejesuperior.kTimeoutMs);
     /* Config the Velocity closed loop gains in slot0 */
-    motejearriba.config_kF(KPIDejesuperior.kPIDLoopIdx, KPIDejesuperior.kF,
+    /*motejearriba.config_kF(KPIDejesuperior.kPIDLoopIdx, KPIDejesuperior.kF,
         KPIDejesuperior.kTimeoutMs);
     motejearriba.config_kP(KPIDejesuperior.kPIDLoopIdx, KPIDejesuperior.KP,
         KPIDejesuperior.kTimeoutMs);
@@ -255,7 +264,9 @@ public class BrazoSubsystem extends SubsystemBase {
 
     motejearriba.setSensorPhase(true);
     motejearriba.setInverted(true);
-  }
+  }*/
+
+
 
   /*
    * Engranes Robot, conversion encorders:
@@ -283,5 +294,14 @@ public class BrazoSubsystem extends SubsystemBase {
    * 3.285714
    * 
    */
+  public void obtenerpid(){
+
+
+  
+  }
+
 
 }
+
+
+

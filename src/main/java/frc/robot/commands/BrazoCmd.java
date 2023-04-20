@@ -49,7 +49,6 @@ public class BrazoCmd extends CommandBase {
   @Override
   public void initialize() {
     brazosubsystem.config_motor_eje_inf();
-    brazosubsystem.config_motor_eje_sup();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

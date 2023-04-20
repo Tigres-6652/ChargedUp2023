@@ -30,7 +30,6 @@ public class BrazoConfig extends CommandBase {
   public void initialize() {
 
     brazosubsystem.config_motor_eje_inf();
-    brazosubsystem.config_motor_eje_sup();
 
     SmartDashboard.putNumber("get inf", gradosejeinf);
     SmartDashboard.putNumber("get sup", gradosejesup);

@@ -24,7 +24,7 @@ public class Constants {
         }
 
         public static final class posicioncubopiso {
-            public static double ejesuperior = 1;
+            public static double ejesuperior = 145;
             public static double ejeinferior = 98;
         }
 
@@ -89,7 +89,7 @@ public class Constants {
         public static int PuertMotIzq1yEncoder = 4;
         public static int PuertMotIzq2 = 5;
         public static int PuertMotIzq3 = 6;
-        public static int PuertMotEjeSuperior = 7;
+        public static int   PuertMotEjeSuperior = 7;
         public static int PuertMotEjeinferior = 8;
     }
 
