@@ -22,7 +22,7 @@ public class TestPath extends SequentialCommandGroup {
   /** Creates a new TestPath. */
 
   private static final Trajectory TestPath = PathPlanner.loadPath("TestPath", AutoConstants.kMaxSpeedMetersPerSecond,
-      AutoConstants.kMaxAccelerationMetersPerSecondSquared,true);
+      AutoConstants.kMaxAccelerationMetersPerSecondSquared,false);
 
   public TestPath() {
     

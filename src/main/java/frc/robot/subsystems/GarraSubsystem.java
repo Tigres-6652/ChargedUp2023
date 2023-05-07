@@ -27,36 +27,13 @@ public class GarraSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("motor_garra", pdp.getCurrent(4));
   }
 
-  /*public void stategarra(boolean lanzarcubo, boolean lanzarcono, boolean agarrar) {
-
-
-    if ((lanzarcubo)) {
-
-      motor_garra.set(-1);
-
-    } else if (lanzarcono) {
-
-      motor_garra.set(-0.2);
-
-    } else if (agarrar) {
-
-      motor_garra.set(0.45);
-
-    } else {
-
-      motor_garra.set(0);
-
-    }
-
-  }*/
-
 public void stateagarrarReset(){
 
   stateagarrar=true;
 
 }
 
-  public void stategarra2(boolean lanzarcubo, boolean lanzarcono, boolean agarrar) {
+  public void stategarra(boolean lanzarcubo, boolean lanzarcono, boolean agarrar) {
 
 
     if ((lanzarcubo)) {

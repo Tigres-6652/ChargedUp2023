@@ -31,13 +31,13 @@ public class GarraCmd extends CommandBase {
   @Override
   public void execute() {
 
-    garraSubsystem.stategarra2(lanzarcubo.get(), lanzarcono.get(), agarrargp.get());
+    garraSubsystem.stategarra(lanzarcubo.get(), lanzarcono.get(), agarrargp.get());
   }
 
   @Override
   public void end(boolean interrupted) {
 
-    garraSubsystem.stategarra2(false, false, false);
+    garraSubsystem.stategarra(false, false, false);
 
   }
 

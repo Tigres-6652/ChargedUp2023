@@ -24,13 +24,13 @@ public class Constants {
         }
 
         public static final class posicioncubopiso {
-            public static double ejesuperior = 145;
+            public static double ejesuperior = 135;
             public static double ejeinferior = 98;
         }
 
         public static final class posicionSafeArm { // teleop
 
-            public static double ejesuperior = 270;
+            public static double ejesuperior = 265;
             public static double ejeinferior = 85;
 
         }
@@ -67,8 +67,8 @@ public class Constants {
     public static final class AjustesMovimientoChasis {
 
         public static final class val_Balanceo {
-            public static double velocidadmaxima = 500;
-            public static double kp = -50;
+            public static double velocidadmaxima = 505;
+            public static double kp = -60;
         }
 
         public static class autoapuntado { // limelight

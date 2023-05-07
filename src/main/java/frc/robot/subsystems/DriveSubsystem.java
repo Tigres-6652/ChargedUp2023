@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -12,14 +11,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.AjustesMovimientoChasis;
 import frc.robot.Constants.PUERTOSCAN;
 import frc.robot.Constants.AjustesMovimientoChasis.val_Balanceo;
@@ -58,11 +55,9 @@ public class DriveSubsystem extends SubsystemBase {
   AHRS m_gyro = new AHRS(SPI.Port.kMXP); // navx
   DifferentialDriveOdometry m_odometry;
 
-  public static ADIS16470_IMU gyro = new ADIS16470_IMU();
-  // ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-
   // Balanceo
   double velocidadbalanceo;
+double velbalanceo2;
 
   // variable posicion sin mover
   double posicionfijaizq;
@@ -72,10 +67,16 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
 
     m_odometry.update(
-        getRotation2d()/* m_gyro.getRotation2d() */, getRightEncoderdistance(), getLeftEncoderdistance());
+        getRotation2d(), getRightEncoderdistance(), getLeftEncoderdistance());
 
     SmartDashboard.putNumber("encizq", getLeftEncoderdistance());
     SmartDashboard.putNumber("encder", getRightEncoderdistance());
+
+    SmartDashboard.putNumber("angle",m_gyro.getAngle());    //pal path
+    SmartDashboard.putNumber("pitch", m_gyro.getPitch()); //pa la charge
+
+
+    //
 
     /**
      * SmartDashboard.putNumber("getTurnRate", getTurnRate());
@@ -97,8 +98,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public DriveSubsystem() {
-    // resetEncoders();
 
+    
     m_odometry = new DifferentialDriveOdometry(getRotation2d(),
         getLeftEncoderdistance(), getRightEncoderdistance());
 
@@ -175,7 +176,7 @@ public class DriveSubsystem extends SubsystemBase {
       chasis.arcadeDrive(ajustdist, -ajutGi);
 
     } else if (balanceo) {
-      double angulo_equilibrio = gyro.getXComplementaryAngle();
+      double angulo_equilibrio = -m_gyro.getPitch();
 
       double vel = angulo_equilibrio * val_Balanceo.kp;
 
@@ -191,8 +192,23 @@ public class DriveSubsystem extends SubsystemBase {
         velocidadbalanceo = vel;
       }
 
-      MCI1ENC.set(ControlMode.Velocity, velocidadbalanceo);
-      MCD4ENC.set(ControlMode.Velocity, velocidadbalanceo);
+
+
+      if(velocidadbalanceo>0.01){
+
+        velbalanceo2=velocidadbalanceo*0.5 ;
+
+
+      }else if(velocidadbalanceo<-0.01){
+
+        velbalanceo2=velocidadbalanceo*1;
+
+
+      }
+
+
+      MCI1ENC.set(ControlMode.Velocity, velbalanceo2);
+      MCD4ENC.set(ControlMode.Velocity, velbalanceo2);
 
       MCI2.follow(MCI1ENC);
       MCI3.follow(MCI1ENC);
@@ -221,29 +237,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
-    SmartDashboard.putNumber("gyro1", gyro.getAngle());
-    SmartDashboard.putNumber("gyro2", gyro.getXComplementaryAngle());
-    SmartDashboard.putNumber("gyro3", gyro.getYComplementaryAngle());
-
-    SmartDashboard.putNumber("posicionIzq", MCI1ENC.getSelectedSensorPosition());
-    SmartDashboard.putNumber("posicionDer", MCD4ENC.getSelectedSensorPosition());
+    /*SmartDashboard.putNumber("posicionIzq", MCI1ENC.getSelectedSensorPosition());
+    SmartDashboard.putNumber("posicionDer", MCD4ENC.getSelectedSensorPosition());*/
 
   }
 
-  public void set_distance(double distancia) {
-
-double pulses=DistanceToPulses(distancia);
-
-    MCI1ENC.set(ControlMode.Position, pulses);
-    MCD4ENC.set(ControlMode.Position, pulses);
-
-    MCI2.follow(MCI1ENC);
-    MCI3.follow(MCI1ENC);
-
-    MCD5.follow(MCD4ENC);
-    MCD6.follow(MCD4ENC);
-
-  }
 
   public double DistanceToPulses(double distanceMTS) {
 
@@ -274,9 +272,8 @@ double pulses=DistanceToPulses(distancia);
     MCI1ENC.setSelectedSensorPosition(0);
     MCD4ENC.setSelectedSensorPosition(0);
 
-    // m_gyro.reset();
+     m_gyro.reset();
 
-    gyro.reset();
 
   }
 
@@ -315,29 +312,27 @@ double pulses=DistanceToPulses(distancia);
 
   public void zeroHeading() {
 
-    gyro.reset();
-    // m_gyro.reset();
+     m_gyro.reset();
   }
 
   public double getHeading() {
 
-    return 0;
     //return gyro.getAngle();
-    // return -m_gyro.getRotation2d().getDegrees();
+     return m_gyro.getRotation2d().getDegrees();
   }
 
   public double getTurnRate() {
 
-    return 0;
+    //return 0;
     //return gyro.getRate();
-    // return m_gyro.getRate();
+     return -m_gyro.getRate();
   }
 
   public Rotation2d getRotation2d() {
 
-    // return m_gyro.getRotation2d();
+     return m_gyro.getRotation2d();
 
-    return Rotation2d.fromDegrees(0);
+    //return Rotation2d.fromDegrees(0);
     //return Rotation2d.fromDegrees(gyro.getRate());
   }
 

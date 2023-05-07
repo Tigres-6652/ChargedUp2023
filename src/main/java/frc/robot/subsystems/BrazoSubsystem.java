@@ -11,20 +11,21 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.KPIDejeinferior;
 import frc.robot.Constants.PUERTOSCAN;
 
 public class BrazoSubsystem extends SubsystemBase {
 
   WPI_TalonSRX motejeabajo = new WPI_TalonSRX(PUERTOSCAN.PuertMotEjeinferior);
- // WPI_TalonFX motejearriba = new WPI_TalonFX(PUERTOSCAN.PuertMotEjeSuperior);
-
   CANSparkMax motejesuperioSparkMax= new CANSparkMax(PUERTOSCAN.PuertMotEjeSuperior, MotorType.kBrushless);
 
-  ProfiledPIDController pidprofilejesup = new ProfiledPIDController(0.2, 0, 0.1, new TrapezoidProfile.Constraints(50,60));
+  ProfiledPIDController pidprofilejesup = new ProfiledPIDController(0.05, 0.0005, 0.00, new TrapezoidProfile.Constraints(80,90));
 
   DigitalInput limitejeinferior = new DigitalInput(8);
   DigitalInput limitejesuperior = new DigitalInput(9);
+
+  double interactive;
 
   public BrazoSubsystem() {
   }
@@ -37,6 +38,8 @@ public class BrazoSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("grados eje inferior", gradosEjeInferior());
     SmartDashboard.putNumber("grados eje superior", gradosEjeSuperior());
    //SmartDashboard.get("grados", motejesuperioSparkMax.getEncoder());
+
+
   }
 
   public void ejeinferior(double velinf) { // movimiento con control
@@ -162,13 +165,19 @@ public class BrazoSubsystem extends SubsystemBase {
   }
 
   public void movimiento_brazo_angulo(double gradosinferior, double gradosuperior) {
-    
+    if(RobotContainer.modointeractivo){
+      interactive=1;
+    }else{
+      interactive=1;
+    }
+
     double posicion_inferior = gradosEjeInferiorApulsos(gradosinferior);
     double posicion_superior = gradosEjeSuperiorApulsos(gradosuperior);
 
     //double cuantotalta=(posicion_superior-gradosEjeSuperior());
-    motejesuperioSparkMax.set(pidprofilejesup.calculate(gradosuperior, posicion_superior));
-    motejeabajo.set(ControlMode.Position, posicion_inferior*2.5);
+    SmartDashboard.putNumber("PID BRAZO", pidprofilejesup.calculate(motejesuperioSparkMax.getEncoder().getPosition(), posicion_superior));
+    motejesuperioSparkMax.set((pidprofilejesup.calculate(motejesuperioSparkMax.getEncoder().getPosition(), posicion_superior))*interactive);
+    motejeabajo.set(ControlMode.Position, posicion_inferior);
 
   }
 
