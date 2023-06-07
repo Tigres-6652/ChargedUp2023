@@ -104,17 +104,17 @@ new JoystickButton(XboxController_secondary, 6).toggleOnTrue(new BrazoCmd(brazos
 
 
       new POVButton(XboxController_main, -1). onTrue (new BrazoCmd(brazosubsystem, () -> 0.0, () -> 0.0,      ()->false, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
-      new POVButton(XboxController_main, 0).  onTrue(new BrazoCmd(brazosubsystem, () -> 0.4, () -> 0.0,      ()->true, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
-      new POVButton(XboxController_main, 180).onTrue(new BrazoCmd(brazosubsystem, () -> -0.2, () -> 0.0,      ()->true, ()->false, ()->false, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false)); 
+      new POVButton(XboxController_main, 0).  onTrue(new BrazoCmd(brazosubsystem, () -> 0.8, () -> 0.0,      ()->true, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
+      new POVButton(XboxController_main, 180).onTrue(new BrazoCmd(brazosubsystem, () -> -0.6, () -> 0.0,      ()->true, ()->false, ()->false, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false)); 
 
-      new POVButton(XboxController_main, 90).  onTrue(new BrazoCmd(brazosubsystem, () -> 0.0, () -> -0.2,      ()->true, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
-      new POVButton(XboxController_main, 270).onTrue(new BrazoCmd(brazosubsystem, () -> -0.0, () -> 0.2,      ()->true, ()->false, ()->false, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false)); 
+      new POVButton(XboxController_main, 90).  onTrue(new BrazoCmd(brazosubsystem, () -> 0.0, () -> -0.6,      ()->true, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false, ()->false, ()->false));
+      new POVButton(XboxController_main, 270).onTrue(new BrazoCmd(brazosubsystem, () -> -0.0, () -> 0.6,      ()->true, ()->false, ()->false, ()->false, ()->false, ()->false,  ()->false, ()->false, ()->false, ()->false)); 
 
 
 
       driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
-      () -> ((XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2))*0.5), // Velocidad
-      () -> (-XboxController_main.getRawAxis(0)*0.5), // giro
+      () -> ((XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2))*1), // Velocidad
+      () -> (-XboxController_main.getRawAxis(0)*1), // giro
       () -> false, // boton autoapuntado limelight
       () -> false, // boton balanceo
       () -> false,// boton apuntado substation
