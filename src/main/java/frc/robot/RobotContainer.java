@@ -55,7 +55,7 @@ if(!modointeractivo){
     configureAuto();
 
   driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
-  () -> (XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2)), // Velocidad
+  () -> (XboxController_main.getRawAxis(5) ), // Velocidad
   () -> -XboxController_main.getRawAxis(0), // giro
   () -> XboxController_main.getRawButton(2), // boton autoapuntado limelight
   () -> XboxController_main.getRawButton(3), // boton balanceo
@@ -113,7 +113,7 @@ new JoystickButton(XboxController_secondary, 6).toggleOnTrue(new BrazoCmd(brazos
 
 
       driveSubsystem.setDefaultCommand(new DriveTrainCmd(driveSubsystem,
-      () -> ((XboxController_main.getRawAxis(3) - XboxController_main.getRawAxis(2))*1), // Velocidad
+      () -> ((-XboxController_main.getRawAxis(5))), // Velocidad
       () -> (-XboxController_main.getRawAxis(0)*1), // giro
       () -> false, // boton autoapuntado limelight
       () -> false, // boton balanceo
